@@ -1,3 +1,3 @@
 # Menus
 
-A simple toggl menu created using javascript
+A simple toggle menu created using javascript
