@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+/*    max-width: 400px;*/
+    background-color: coral;
+    color: white;
+    padding: 1em;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+button {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#menu {
+    display: none;
+    position: absolute;
+    top: 112;
+    left: 0;
+    margin-left: 50%;
+    width: 50%;
+    
+}
+
+ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    background: black;
+}
+
+li{
+}
+
+li a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+}
+
+li a:hover {
+    color: coral;
+}
