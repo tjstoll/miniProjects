@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://kit.fontawesome.com/754f3acd5a.js" crossorigin="anonymous"></script>
+        
+        <title>JS Carousel</title>
+    </head>
+    
+    <body>
+        <div class="wrapper">
+            <div class="carousel-box">
+                <button id="left-button" class="navigation" onclick="move(1)"><i class="fa-solid fa-chevron-left" ></i></button>
+                <button id="right-button" class="navigation" onclick="move(-1)"><i class="fa-solid fa-chevron-right"></i></button>
+                <article id="article-1">
+                    <h2>This is an article</h2>
+                    <p> There are words inside this article</p>
+                </article>
+                <article id="article-2">
+                    <h2>This is also an article</h2>
+                    <p> There are words inside this article</p>
+                </article>
+            </div>
+        </div>
+        
+        <script src="carousel.js"></script>
+    </body>
+</html>
