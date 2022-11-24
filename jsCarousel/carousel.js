@@ -1,18 +1,44 @@
 "use strict";
 
-var article1 = document.getElementById("article-1");
-var article2 = document.getElementById("article-2");
+var ponies = document.getElementsByClassName("pony");
+var number_of_ponies = ponies.length;
+var index = 0;
+
+var dots_div = document.getElementById("dots");
+var dot = document.createElement("i");
+dot.classList.add("fa-solid", "fa-circle", "dot");
+
+//add number_of_ponies-1 dots to navigation_dots
+for (let x=1; x<number_of_ponies; x++) {
+    dots_div.appendChild(dot.cloneNode());
+}
+
+var dot_list = dots_div.children;
+
+// hide all ponies except the first
+for (let i=1; i<number_of_ponies; i++) {
+    ponies[i].style.display = "none";
+}
 
 function move(dir) {
-    if (dir > 0) {
-        article1.style.left = "0%";
-        article2.style.left = "100%";
-    }
+    // get pony at index and set display to hidden
+    ponies[index].style.display = "none";
+    dot_list[index].removeAttribute("id");
     
-    else {
-        article1.style.left = "-100%";
-        article2.style.left = "0%";
-    }
+    // increment index by dir
+    index += dir;
     
-    console.log(article1.style.left);
+    // if index is beyond the maximum/minimum index of ponies then set index to 0;
+    if (index > (number_of_ponies-1)) {
+        index = 0;
+    }
+    else if (index < 0) {
+        index = number_of_ponies-1;
+    }
+    else {}
+    
+    // find pony at index and set style to display block and left 0
+    ponies[index].style.display = "block";
+    dot_list[index].id = "active-dot";
+    console.log(index);
 }
