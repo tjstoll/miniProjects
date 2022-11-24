@@ -47,10 +47,22 @@ article {
     position: absolute;
 }
 
-#article-1 {
-    background: coral;
+#dots {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: grey;
+    
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
 }
-#article-2 {
-    background: turquoise;
-    left: 100%;
+
+#active-dot {
+    color: black;
+} 
+
+.dot {
+    margin: 0px 5px;
+    opacity: 80%;
 }
