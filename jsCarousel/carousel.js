@@ -7,10 +7,13 @@ var index = 0;
 var dots_div = document.getElementById("dots");
 var dot = document.createElement("i");
 dot.classList.add("fa-solid", "fa-circle", "dot");
+var unique_dot = null;
 
 //add number_of_ponies-1 dots to navigation_dots
 for (let x=1; x<number_of_ponies; x++) {
-    dots_div.appendChild(dot.cloneNode());
+    unique_dot = dot.cloneNode();
+    unique_dot.addEventListener("click", function() {jumpTo(x)});
+    dots_div.appendChild(unique_dot);
 }
 
 var dot_list = dots_div.children;
@@ -40,5 +43,14 @@ function move(dir) {
     // find pony at index and set style to display block and left 0
     ponies[index].style.display = "block";
     dot_list[index].id = "active-dot";
-    console.log(index);
+}
+
+function jumpTo(ind) {
+    ponies[index].style.display = "none";
+    dot_list[index].removeAttribute("id");
+    
+    index = ind;
+    
+    ponies[index].style.display = "block";
+    dot_list[index].id = "active-dot";
 }
