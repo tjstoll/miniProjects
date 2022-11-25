@@ -41,7 +41,7 @@ function move(dir) {
     else {}
     
     // find pony at index and set style to display block and left 0
-    ponies[index].style.display = "block";
+    ponies[index].style.display = "flex";
     dot_list[index].id = "active-dot";
 }
 
@@ -51,6 +51,6 @@ function jumpTo(ind) {
     
     index = ind;
     
-    ponies[index].style.display = "block";
+    ponies[index].style.display = "flex";
     dot_list[index].id = "active-dot";
 }
