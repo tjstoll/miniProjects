@@ -27,10 +27,13 @@ h2, p {
     position: absolute;
     top: 50%;
     z-index: 1;
+    background: none;
+    border: none;
 }
 
 .navigation:hover {
     cursor: pointer;
+    color: coral;
 }
 
 #left-button {
@@ -56,10 +59,11 @@ article {
     display: flex;
     justify-content: center;
     padding-bottom: 10px;
+    z-index: 1;
 }
 
 #active-dot {
-    color: black;
+    color: coral;
 } 
 
 .dot {
