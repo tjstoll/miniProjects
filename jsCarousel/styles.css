@@ -25,26 +25,36 @@ p {
     border: 1px solid black;
 }
 
-.navigation{
+.main-navigation {
     position: absolute;
-    top: 50%;
+    height: 100%;
+    width: 100%;
     z-index: 1;
-    background: none;
-    border: none;
-    margin: 0 10px;
+    display: flex;
+    justify-content: space-between
 }
 
-.navigation:hover {
+.navigation-arrows{
+    background: none;
+    border: none;
+    padding: 0px 10px;
+    width: 100%;
+}
+
+.navigation-arrows:hover {
     cursor: pointer;
     color: white;
 }
 
 #left-button {
-        left: 0;
+    left: 0;
+    text-align: start;
 }
 
 #right-button {
     right: 0;
+        text-align: end;
+
 }
 
 article {
@@ -60,7 +70,7 @@ article p {
     font-size: 3em;
 }
 
-#dots {
+#navigation-dots {
     position: absolute;
     bottom: 0;
     width: 100%;
