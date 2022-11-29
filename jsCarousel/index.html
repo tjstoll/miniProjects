@@ -11,23 +11,25 @@
     <body>
         <div class="wrapper">
             <div class="carousel-box">
-                <button id="left-button" class="navigation" onclick="move(-1)"><i class="fa-solid fa-chevron-left" ></i></button>
-                <button id="right-button" class="navigation" onclick="move(1)"><i class="fa-solid fa-chevron-right"></i></button>
-                <div id="dots">
+                <div class="main-navigation">
+                    <button id="left-button" class="navigation-arrows" onclick="move(-1)"><i class="fa-solid fa-chevron-left" ></i></button>
+                    <button id="right-button" class="navigation-arrows" onclick="move(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            <div id="navigation-dots">
                     <i class="fa-solid fa-circle dot" id="active-dot" onclick="jumpTo(0)"></i>
                 </div>
-                <article class="pony" id="article1">
+                <article class="carousel-slide" id="article1">
                     <p>&#127797</p>
                 </article>
-                <article class="pony" id="article2">
+                <article class="carousel-slide" id="article2">
                     <p>&#128011</p>
                 </article>
-                <article class="pony" id="article3">
+                <article class="carousel-slide" id="article3">
                     <p>&#127821</p>
                 </article>
             </div>
             <footer>
-                <p>a rough work in progress</p>
+                <p>version 1.0</p>
             </footer>
         </div>
         
