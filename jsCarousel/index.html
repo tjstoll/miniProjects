@@ -12,11 +12,11 @@
         <div class="wrapper">
             <div class="carousel-box">
                 <div class="main-navigation">
-                    <button id="left-button" class="navigation-arrows" onclick="move(-1)"><i class="fa-solid fa-chevron-left" ></i></button>
-                    <button id="right-button" class="navigation-arrows" onclick="move(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button id="left-button" class="navigation-arrows" onclick="changeSlide('move-left', -1)"><i class="fa-solid fa-chevron-left" ></i></button>
+                    <button id="right-button" class="navigation-arrows" onclick="changeSlide('move-right', 1)"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             <div id="navigation-dots">
-                    <i class="fa-solid fa-circle dot" id="active-dot" onclick="jumpTo(0)"></i>
+                    <i class="fa-solid fa-circle dot" id="active-dot" onclick="changeSlide('jump-to', 0)"></i>
                 </div>
                 <article class="carousel-slide" id="article1">
                     <p>&#127797</p>
@@ -29,7 +29,7 @@
                 </article>
             </div>
             <footer>
-                <p>version 1.0</p>
+                <p>version 2.0</p>
             </footer>
         </div>
         
