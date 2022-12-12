@@ -1,0 +1,93 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 10px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0rem 1rem;
+}
+
+header {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: rgb(214, 214, 214);
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h3 {
+    font-family: monospace;
+    max-width: fit-content;
+    background-color: white;
+}
+
+#box_controls {
+    height: 35%;
+    overflow-y: scroll;
+    padding: 0 1rem;
+}
+
+
+#box_controls::-webkit-scrollbar,
+#result::-webkit-scrollbar  {
+    width: 0.2rem;
+}
+
+#box_controls::-webkit-scrollbar-thumb,
+#result::-webkit-scrollbar-thumb {
+    background-color: darkgray;
+}
+
+#box_controls input:hover {
+    cursor: pointer;
+}
+
+#box_controls div {
+    margin-bottom: 2rem;
+}
+
+#box_controls label {
+    font-family: monospace;
+    font-size: 16px;
+}
+
+#result {
+    height: 65%;
+    background-color: white;
+    overflow-y: overlay;
+}
+#result div {
+    height: 100px;
+    width: 100px;
+}
+
+@media (min-width: 650px) {
+    .container {
+        flex-direction: row;
+    }
+
+    #box_controls {
+        width: 35%;
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    #result {
+        height: 100%;
+        width: 65%;
+        overflow-y: scroll;
+    }
+
+    #box_controls::-webkit-scrollbar,
+    #result::-webkit-scrollbar  {
+        width: 0.5rem;
+}
+}

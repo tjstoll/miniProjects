@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Flex Box</title>
+</head>
+<body>
+    <header>
+        <h1>Playing with Flex Box</h1>
+    </header>
+
+    <section class="container">
+        <article id="box_controls">
+            <h2>Box Controls</h2>
+            <form>
+                <div>
+                    <h3>display</h3>
+
+                    <p>
+                    <input type="radio" name="display" id="flexbox" value="flexbox" onchange="changeProperty('display', 'flex')">
+                    <label for="display">flex</label>
+                    </p>
+
+                    <p>
+                    <input type="radio" name="display" id="autobox" value="autobox" onchange="changeProperty('display', '')">
+                    <label for="display">auto</label>
+                    </p>
+                </div>
+
+                <div>
+                    <h3>flex-wrap</h3>
+                    <p>
+                        <input type="radio" name="flex_wrap" id="nowrap" value="nowrap" onchange="changeProperty('flex-wrap', 'nowrap')">
+                        <label for="flex_wrap">nowrap</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="flex_wrap" id="wrap" value="wrap" onchange="changeProperty('flex-wrap', 'wrap')">
+                    <label for="flex_wrap">wrap</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="flex_wrap" id="wrap_reverse" value="wrap_reverse" onchange="changeProperty('flex-wrap', 'wrap-reverse')">
+                    <label for="flex_wrap">wrap-reverse</label>
+                    </p>
+                </div>
+
+                <div>
+                    <h3>justify-content</h3>
+                    <p>
+                    <input type="radio" name="justify_content" id="start" value="start" onchange="changeProperty('justify-content', 'start')">
+                    <label for="justify_content">start</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="justify_content" id="end" value="end" onchange="changeProperty('justify-content', 'end')">
+                    <label for="justify_content">end</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="justify_content" id="center" value="center" onchange="changeProperty('justify-content', 'center')">
+                    <label for="justify_content">center</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="justify_content" id="space_between" value="space_between" onchange="changeProperty('justify-content', 'space-between')">
+                    <label for="justify_content">space-between</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="justify_content" id="space_around" value="space_around" onchange="changeProperty('justify-content', 'space-around')">
+                    <label for="justify_content">space-around</label>
+                    </p>
+                    <p>
+                    <input type="radio" name="justify_content" id="space_evenly" value="space_evenly" onchange="changeProperty('justify-content', 'space-evenly')">
+                    <label for="justify_content">space-evenly</label>
+                    </p>
+                </div>
+
+                <div>
+                    <h3>align-items</h3>
+                    <p>
+                        <input type="radio" name="align_items" id="align-start" value="start" onchange="changeProperty('align-items', 'start')">
+                        <label for="align_items">start</label>
+                    </p>
+                    
+                    <p>
+                        <input type="radio" name="align_items" id="align-end" value="end" onchange="changeProperty('align-items', 'end')">
+                        <label for="align_items">end</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_items" id="align-center" value="center" onchange="changeProperty('align-items', 'center')">
+                    <label for="align_items">center</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_items" id="align-baseline" value="baseline" onchange="changeProperty('align-items', 'baseline')">
+                        <label for="align_items">baseline</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_items" id="align-stretch" value="stretch" onchange="changeProperty('align-items', 'stretch')">
+                        <label for="align_items">stretch</label>
+                    </p>
+                </div>
+
+                <div>
+                    <h3>align-content</h3>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-start" value="start" onchange="changeProperty('align-content', 'start')">
+                        <label for="align_content">start</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-end" value="end" onchange="changeProperty('align-content', 'end')">
+                        <label for="align_content">end</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-center" value="center" onchange="changeProperty('align-content', 'center')">
+                        <label for="align_content">center</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-stretch" value="stretch" onchange="changeProperty('align-content', 'stretch')">
+                        <label for="align_content">stretch</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-space-around" value="space_around" onchange="changeProperty('align-content', 'space-around')">
+                    <label for="align_content">space-around</label>
+                    </p>
+
+                    <p>
+                        <input type="radio" name="align_content" id="alignc-space-between" value="space_between" onchange="changeProperty('align-content', 'space-between')">
+                        <label for="align_content">space-between</label>
+                    </p>
+                </div>
+
+                <div>
+                    <h3>flex-direction</h3>
+                    <p>
+                        <input type="radio" name="flex_direction" id="row" value="row" onchange="changeProperty('flex-direction', 'row')">
+                        <label for="flex_direction">row</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="flex_direction" id="row_reverse" value="row_reverse" onchange="changeProperty('flex-direction', 'row-reverse')">
+                        <label for="flex_direction">row-reverse</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="flex_direction" id="column" value="column" onchange="changeProperty('flex-direction', 'column')">
+                        <label for="flex_direction">column</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="flex_direction" id="column_reverse" value="column_reverse" onchange="changeProperty('flex-direction', 'column-reverse')">
+                        <label for="flex_direction">column-reverse</label>
+                    </p>
+                </div>
+            </form>
+        </article>
+
+        <article id="result">
+            <div style="background-color: #264653"></div>
+            <div style="background-color: #2a9d8f"></div>
+            <div style="background-color: #e9c46a"></div>
+            <div style="background-color: #f4a261"></div>
+            <div style="background-color: #e76f51"></div>
+        </article>
+    </section>
+
+    <script src="flex.js"></script>
+</body>
+</html>
