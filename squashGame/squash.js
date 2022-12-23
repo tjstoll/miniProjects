@@ -19,10 +19,11 @@ let rightPressed = false;
 const ball_size = 10;
 let x;
 let y;
-let dx = 3;
-let dy = 3;
+let dx;
+let dy
 
 let score;
+let level;
 
 function drawBall() {
     ctx.beginPath();
@@ -40,10 +41,16 @@ function drawPaddle() {
     ctx.closePath();
 }
 
-function drawScore () {
+function drawScore() {
     ctx.font = "16px Monospace";
     ctx.fillStyle = "rgb(255,255,255)";
     ctx.fillText(`score: ${score}`, 8, 20)
+}
+
+function drawLevel() {
+    ctx.font = "16px Monospace";
+    ctx.fillStyle = "rgb(255,255,255)";
+    ctx.fillText(`level: ${level}`, 8, 40);
 }
 
 function drawGameOver () {
@@ -106,6 +113,7 @@ function draw() {
     drawBall();
     drawPaddle();
     drawScore();
+    drawLevel();
 
     // If ball is at right or left edge reverse x direciton
     if (x+dx < 0 || x+dx > canvas_width - ball_size) {
@@ -123,6 +131,11 @@ function draw() {
         if (x > paddleX-ball_size && x < paddleX + paddle_width + ball_size) {
             dy = -dy;
             score++;
+            if (score%5 === 0) {
+                level += 1;
+                dy += 0.5*Math.sign(dy);
+                dx += 0.5*Math.sign(dx);
+            }
         }
 
         else {
@@ -152,8 +165,11 @@ function play() {
     play_button.disabled = true;
     x = Math.random()*canvas_width;
     y = Math.random()*canvas_height/3;
+    dx = 3;
+    dy = 3;
     paddleX = (canvas_width - paddle_width) / 2;
     score = 0;
+    level = 1;
 
     draw();
 }
