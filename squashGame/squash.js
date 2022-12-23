@@ -83,9 +83,21 @@ function mouseMoveHandler(e) {
     }
 }
 
+function touchHandler(e) {
+    console.log("touch");
+    if (e.touches) {
+        const relativeX = e.touches[0].pageX - canvas.offsetLeft;
+        if (relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddle_width/2;
+        }
+    }
+}
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("touchstart", touchHandler);
+document.addEventListener("touchmove", touchHandler);
 
 // clear canvas
 // update position of ball and paddle
