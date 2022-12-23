@@ -1,0 +1,36 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#field {
+    background-color: green;
+    border: 10px solid burlywood;
+}
+
+#buttons {
+    width: 520px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#buttons button {
+    width: 45%;
+    border: none;
+    background-color:darkcyan;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#buttons button:disabled {
+    color: darkslategrey;
+}
+
+#buttons button:hover {
+    cursor: pointer;
+}
