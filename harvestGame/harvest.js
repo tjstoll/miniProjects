@@ -16,7 +16,12 @@ let dx;
 let dy;
 let key_pressed = "";
 
-const fruit_size = 10;
+let fruitX;
+let fruitY;
+const fruit_size = 20;
+let start_time;
+
+let score;
 
 function drawFarmer() {
     ctx.beginPath();
@@ -54,6 +59,26 @@ function moveFarmer() {
     }
 }
 
+function drawFruit() {
+    ctx.beginPath();
+    ctx.rect(fruitX, fruitY, fruit_size, fruit_size);
+    ctx.fillStyle = "rgb(255,0,0)";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawQuit() {
+    ctx.font = "24px Monospace";
+    ctx.fillStyle = "rgb(255,255,255)";
+    ctx.fillText("FARMER JOE HAS QUIT :'(", 8, field_height/2);
+}
+
+function drawScore() {
+    ctx.font = "16px Monospace";
+    ctx.fillStyle = "rgb(255, 255, 255)";
+    ctx.fillText(`fruit collected: ${score}`, 8, 20);
+}
+
 function keyDownHandler(e) {
     key_pressed = e.key
     if (
@@ -79,12 +104,26 @@ function draw() {
     ctx.clearRect(0, 0, field_width, field_height);
     drawFarmer();
     moveFarmer();
+    drawScore();
+
+    if (Math.abs(x-fruitX) < fruit_size && Math.abs(y-fruitY) < fruit_size) {
+        score++;
+        start_time = new Date();
+        fruitX = Math.random()*field_width;
+        fruitY = Math.random()*field_height;
+    } else if ((Date.now() - start_time.getTime())/1000 > 3) {
+        start_time = new Date();
+        fruitX = Math.random()*field_width;
+        fruitY = Math.random()*field_height;
+    }
+
+    drawFruit();
 
     if (in_play) {
         requestAnimationFrame(draw);
     }
     else {
-        console.log("Goodbye");
+        drawQuit();
         return;
     }
 }
@@ -97,6 +136,10 @@ function play() {
     y = (field_height - farmer_size)/2;
     dx = 3;
     dy = 3;
+    fruitX = Math.random()*field_width;
+    fruitY = Math.random()*field_height;
+    start_time = new Date();
+    score = 0;
 
     draw();
 }
