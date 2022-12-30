@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    background: orange;
+    display: flex;
+    font-family: monospace;
+}
+
+h1 {
+    margin: 0;
+}
+
+.container {
+    background: white;
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#turns {
+    font-size: 2em;
+}
+
+#outcome_lose {
+    position: absolute;
+    font-size: 5em;
+    color: red;
+    display: none;
+}
+
+#results {
+    height: 1em;
+    letter-spacing: 0.5em;
+    margin: 3em 0;
+}
+
+.keyboard_row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.keyboard_row button {
+    width: 2em;
+    font-family: monospace;
+}
