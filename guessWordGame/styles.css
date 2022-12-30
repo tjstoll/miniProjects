@@ -22,19 +22,14 @@ h1 {
 
 #turns {
     font-size: 2em;
-}
-
-#outcome_lose {
-    position: absolute;
-    font-size: 5em;
-    color: red;
-    display: none;
+    height: 1.5em;
 }
 
 #results {
     height: 1em;
     letter-spacing: 0.5em;
-    margin: 3em 0;
+    margin-bottom: 2em;
+    font-size: 2em;
 }
 
 .keyboard_row {
@@ -46,5 +41,24 @@ h1 {
 
 .keyboard_row button {
     width: 2em;
+    height: 2em;
     font-family: monospace;
+}
+
+.keyboard_row button:hover {
+    cursor: pointer;
+}
+
+@media (min-width: 650px) {
+    body {
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        width: min-content;
+        height: min-content;
+        padding: 3em;
+        border-radius: 0.5em;
+    }
 }
