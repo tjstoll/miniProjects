@@ -12,50 +12,47 @@ const words = [
 let word_progression;
 let word_appearance;
 let turns;
-let current_key;
+let current_letter;
 
-function buildWord() {
+function buildWordArea() {
     word_appearance = word_progression.join('');
-    document.querySelector("#results").innerHTML = word_appearance;
+    document.querySelector("#word_area").innerHTML = word_appearance;
 }
 
 function updateWordProgession() {
     for (let l=0; l<=word.length; l++) {
-        if (word[l] === current_key) {
-            word_progression[l] = current_key;
+        if (word[l] === current_letter) {
+            word_progression[l] = current_letter;
         }
     }
 }
 
 function checkGuess() {
-    if (word.includes(current_key)) {
+    if (word.includes(current_letter)) {
         updateWordProgession();
-        buildWord();
     }
     else {
         turns--;
     }
 }
 
-function drawTurns() {
+function drawStatus() {
     let turn_string = '';
     for (let i=0; i<turns; i++) {
         turn_string += '&#x1F58D';
     }
-    document.querySelector("#turns").innerHTML = turn_string;
+    document.querySelector("#status").innerHTML = turn_string;
 }
 
 function gameOver() {
     if (turns === 0) {
-        document.querySelector("#turns").innerHTML = "YOU LOSE";
-        document.querySelector("#results").style.color = "red";
-        console.log("YOU LOSE");
+        document.querySelector("#status").innerHTML = "YOU LOSE";
+        document.querySelector("#word_area").style.color = "red";
         return true;
     }
     else if (word_appearance.indexOf('_') < 0) {
-        document.querySelector("#turns").innerHTML = "YOU WIN";
-        document.querySelector("#results").style.color = "green";
-        console.log("YOU WIN");
+        document.querySelector("#status").innerHTML = "YOU WIN";
+        document.querySelector("#word_area").style.color = "green";
         return true;
     }
     else {
@@ -65,15 +62,14 @@ function gameOver() {
 
 function loopManager() {
     checkGuess();
+    buildWordArea();
 
     if (gameOver()) {
         document.querySelectorAll('.kybrdbtn').forEach((btn) => {btn.disabled=true});
         return 0;
     }
     
-    updateWordProgession();
-    buildWord();
-    drawTurns();
+    drawStatus();
 }
 
 function findWord() {
@@ -85,9 +81,9 @@ function findWord() {
     }
 }
 
-function handle(key) {
-    current_key = key;
-    document.querySelector("#"+current_key).disabled = true;
+function handle(letter) {
+    current_letter = letter;
+    document.querySelector("#"+current_letter).disabled = true;
 
     loopManager();
 }
@@ -96,8 +92,8 @@ function initialize() {
     turns = 5;
     word_progression = [];
     document.querySelectorAll('.kybrdbtn').forEach((btn) => {btn.disabled=false});
-    document.querySelector("#results").style.color = "black";
+    document.querySelector("#word_area").style.color = "black";
     findWord();
-    buildWord();
-    drawTurns();
+    buildWordArea();
+    drawStatus();
 }

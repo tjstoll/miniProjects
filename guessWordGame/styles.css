@@ -20,12 +20,12 @@ h1 {
     align-items: center;
 }
 
-#turns {
+#status {
     font-size: 2em;
     height: 1.5em;
 }
 
-#results {
+#word_area {
     height: 1em;
     letter-spacing: 0.5em;
     margin-bottom: 2em;
@@ -39,13 +39,13 @@ h1 {
     margin-bottom: 0.5em;
 }
 
-.keyboard_row button {
+.kybrdbtn {
     width: 2em;
     height: 2em;
     font-family: monospace;
 }
 
-.keyboard_row button:hover {
+.kybrdbtn:hover {
     cursor: pointer;
 }
 
