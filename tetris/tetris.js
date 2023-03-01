@@ -5,17 +5,15 @@ const ctx = canvas.getContext("2d");
 const canvas_height = canvas.clientHeight;
 const canvas_width = canvas.clientWidth;
 
-const blockSize = 15;
+const blockSize = 20;
+let or = 0;
+let x;
+let y;
+let dx = 0;
 
-function drawUnitBlock(x,y) {
-    ctx.beginPath();
-    ctx.rect(x,y, blockSize, blockSize);
-    ctx.fillStyle = "rgb(255,255,255)";
-    ctx.fill();
-    ctx.closePath();
-}
+let game_in_play;
 
-function drawStrait(x, y, orientation) {
+function drawStraight(x, y, orientation) {
     let i;
     let j;
     if (orientation % 2 === 0) {
@@ -150,21 +148,51 @@ function drawSkew(x, y, orientation) {
     ctx.closePath()
 }
 
-// Just looking at the peices
-drawStrait(blockSize, blockSize, 0);
-drawStrait(3*blockSize, blockSize, 1);
+function keyUpHandler(e) {
+    if (e.key === 'Space' || e.key === " ") {
+        if (or < 3) {
+            or++
+        } else {
+            or = 0;
+        }
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        dx = 0;
+    }
+    e.preventDefault();
+}
 
-drawL(blockSize, 8*blockSize, 0);
-drawL(4*blockSize, 8*blockSize, 1);
-drawL(9*blockSize, 8*blockSize, 2);
-drawL(11*blockSize, 8*blockSize, 3);
+function keyDownHandler(e) {
+    if (e.key === "ArrowLeft" || e.key === "Left") {
+        dx = -blockSize;
+    } else if (e.key === "ArrowRight" || e.key === "Right") {
+        dx = blockSize;
+    }
+    e.preventDefault();
+}
 
-drawSquare(blockSize, 14*blockSize);
+document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener("keydown", keyDownHandler, false);
 
-drawT(blockSize, 19*blockSize, 0);
-drawT(5*blockSize, 19*blockSize, 1);
-drawT(8*blockSize, 19*blockSize, 2);
-drawT(13*blockSize, 19*blockSize, 3);
+function gameLoop() {
+    ctx.clearRect(0,0, canvas_width, canvas_height);
+    drawL(x, y, or);
+    y += blockSize;
+    x += dx;
+}
 
-drawSkew(2*blockSize, 24*blockSize, 0);
-drawSkew(5*blockSize, 24*blockSize, 1);
+function start() {
+    console.log("game in play");
+    x = canvas_width/2;
+    y = 0;
+    or = 0;
+
+    if (!game_in_play) {
+        game_in_play = setInterval(gameLoop, 750);
+    }
+}
+
+function stop() {
+    clearInterval(game_in_play);
+    game_in_play = null;
+    console.log("game out of play");
+}
