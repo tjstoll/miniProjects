@@ -8,24 +8,54 @@
 
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    <link rel="stylesheet" href="styles.css">
       
 </head>
 <body>
 
-    <div id="search_results"></div>
+    <h1>My Shows App</h1>
+    <div class="container">
+        <div id="search_results"></div>
+    </div>
     
     <script src="data.js"></script>
     <script src="fetchData.js"></script>
     <script type="text/babel">
-        // Want to extract:
-        // - show name
-        // - image
-        // - rating
-        // - list of genres
-        // - description
 
-        
+        function Genres(props) {
+            const genres = props.content;
+            const genresString = genres.join(', ');
+
+            return <p>{genresString}</p>
+        }
+
+        function ShowInfo(props) {
+            const info = props.info.show;
+            return (
+                <div className='result'>
+                    <img src={info.image.medium} alt={info.name} />
+                    <div className="info">
+                        <h2>{info.name}</h2>
+                        <p>{info.rating.average}</p>
+                        <Genres content={info.genres}/>
+                    </div>
+                    <div className="summary">
+                        <p>{info.summary}</p>
+                    </div>
+                </div>
+            );
+        }
+
+        function ShowsList(props) {
+            const shows = props.shows;
+            const showsList = shows.map((show) => <ShowInfo key={show.show.id} info={show}/>);
+            return <div className="search_results">{showsList}</div>;
+        }
+
+        const results_container = document.querySelector('#search_results');
+        const root = ReactDOM.createRoot(results_container);
+        root.render(<ShowsList shows={results}/>);
+
     </script>
 </body>
 </html>
