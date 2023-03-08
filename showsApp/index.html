@@ -15,6 +15,11 @@
 
     <h1>My Shows App</h1>
     <div class="container">
+        <form>
+            <p>
+                <input id="search" type="text" name="search" placeholder="Search TV Shows">
+            </p>
+        </form>
         <div id="search_results"></div>
     </div>
     
@@ -33,14 +38,18 @@
             const info = props.info.show;
             return (
                 <div className='result'>
-                    <img src={info.image.medium} alt={info.name} />
-                    <div className="info">
-                        <h2>{info.name}</h2>
-                        <p>{info.rating.average}</p>
-                        <Genres content={info.genres}/>
+                    <div className="image">
+                        <img src={info.image.medium} alt={info.name} />
                     </div>
-                    <div className="summary">
-                        <p>{info.summary}</p>
+                    <div className="description">
+                        <div className="info">
+                            <h2>{info.name}</h2>
+                            <p>{info.rating.average}</p>
+                            <Genres content={info.genres}/>
+                        </div>
+                        <div className="summary">
+                            <p>{info.summary}</p>
+                        </div>
                     </div>
                 </div>
             );
