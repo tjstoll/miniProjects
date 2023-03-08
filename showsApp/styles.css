@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.search_results {
+    width: 70%;
+    margin: auto;
+}
+
+.result {
+    display: flex;
+    margin: 10px 0;
+    height: 300px;
+}
+
+.description {
+    margin-left: 15px;
+}
+
+.summary {
+    max-height: 150px;
+    overflow-y: scroll;
+}
