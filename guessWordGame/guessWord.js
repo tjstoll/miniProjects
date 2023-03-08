@@ -48,6 +48,7 @@ function gameOver() {
     if (turns === 0) {
         document.querySelector("#status").innerHTML = "YOU LOSE";
         document.querySelector("#word_area").style.color = "red";
+        document.querySelector("#word_area").innerHTML = word;
         return true;
     }
     else if (word_appearance.indexOf('_') < 0) {
@@ -81,6 +82,30 @@ function findWord() {
     }
 }
 
+async function fetchWord() {
+    const url = 'https://api.api-ninjas.com/v1/randomword?type=noun'
+    await fetch(url, {
+        method: "GET",
+        headers: {
+            'X-Api-Key': 'YOUR API KEY HERE'
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        word = data['word'].toUpperCase();
+    })
+    .catch(e => {
+        console.log('Something went wrong...');
+        console.log(e);
+    })
+
+    for (let i=0; i<word.length; i++) {
+        word_progression.push('_')
+    }
+}
+
 function handle(letter) {
     current_letter = letter;
     document.querySelector("#"+current_letter).disabled = true;
@@ -88,12 +113,13 @@ function handle(letter) {
     loopManager();
 }
 
-function initialize() {
+async function initialize() {
     turns = 5;
     word_progression = [];
     document.querySelectorAll('.kybrdbtn').forEach((btn) => {btn.disabled=false});
     document.querySelector("#word_area").style.color = "black";
-    findWord();
+    //findWord();
+    await fetchWord();
     buildWordArea();
     drawStatus();
 }
