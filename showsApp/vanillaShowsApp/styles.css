@@ -1,0 +1,65 @@
+body {
+    background: black;
+    margin: 0;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+#search_input {
+    width: 75%;
+    border-radius: 100px;
+    padding: 10px;
+    border: 2px solid white;
+}
+
+
+.container {
+    width: 75%;
+    margin: auto;
+}
+
+.result {
+    display: flex;
+    margin: 30px 0;
+}
+
+.info {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+.poster {
+    background-color: white;
+    max-height: 295px;
+    max-width: 210px;
+}
+
+.poster img {
+    height: 295px;
+    width: 210px;
+}
+
+.description {
+    max-height: 150px;
+    overflow-y: scroll;
+}
+
+.description::-webkit-scrollbar-bar {
+    width: 1px;
+}
