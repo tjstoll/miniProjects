@@ -1,6 +1,6 @@
 'use strict';
 
-let search_data = JSON.parse(data);
+let search_data; //= JSON.parse(data);
 let search_results = document.querySelector("#search_results");
 const search_input = document.querySelector('#search_input');
 const baseURL = "https://api.tvmaze.com/search/shows?q=";
