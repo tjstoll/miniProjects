@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <title>Guess Word Game</title>
 </head>
-<body onload="initialize()">
+<body onload="initialize(false)">
     <div class="container">
         <h1>Guess Word</h1>
 
@@ -51,7 +51,7 @@
                 <button class="kybrdbtn" id="M" onclick="handle('M')">M</button>
             </div>
         </div>
-        <button onclick="initialize()">RESTART</button>
+        <button onclick="initialize(true)">RESTART</button>
     </div>
     
     <script src="guessWord.js"></script>
