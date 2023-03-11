@@ -1,14 +1,7 @@
 'use strict';
 
 let word;
-const words = [
-        'PLATYPUS',
-        'AARDVARK',
-        'SUNRISE',
-        'CANTELOPE',
-        'BASKETBALL'
-    ];
-
+let words;
 let word_progression;
 let word_appearance;
 let turns;
@@ -106,6 +99,14 @@ async function fetchWord() {
     }
 }
 
+async function fetchWordList() {
+    const url = "https://raw.githubusercontent.com/tjstoll/miniProjects/main/guessWordGame/words.json";
+    await fetch(url)
+    .then(response => response.json())
+    .then(data => words = data.words)
+    .catch(e => console.log('Somethine went wrong', e));
+}
+
 function handle(letter) {
     current_letter = letter;
     document.querySelector("#"+current_letter).disabled = true;
@@ -113,13 +114,17 @@ function handle(letter) {
     loopManager();
 }
 
-async function initialize() {
+async function initialize(restart) {
+    if(!restart) {
+        await fetchWordList();
+        // await fetchWord();
+    }
+    
     turns = 5;
     word_progression = [];
     document.querySelectorAll('.kybrdbtn').forEach((btn) => {btn.disabled=false});
     document.querySelector("#word_area").style.color = "black";
-    //findWord();
-    await fetchWord();
+    findWord();
     buildWordArea();
     drawStatus();
 }
