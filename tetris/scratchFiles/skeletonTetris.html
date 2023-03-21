@@ -15,7 +15,18 @@
             flex-direction: column;
         }
 
+        #container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
         #console {
+            background-color: black;
+        }
+
+        #skeletonConsole {
             font-size: 24px;
         }
     </style>
@@ -23,8 +34,9 @@
 <body onload="draw()">
 
     <h1>a sort of tetris</h1>
-    <div>
-        <p id="console"></p>
+    <div id="container">
+        <canvas id="console"></canvas>
+        <p id="skeletonConsole"></p>
     </div>
     <button onclick="start()">start</button>
     <button onclick="stop()">stop</button>
