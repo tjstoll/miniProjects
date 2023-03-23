@@ -21,10 +21,18 @@ let grid = structuredClone(clear_grid);
 let grid_width = grid[0].length
 let grid_height = grid.length
 
+// Mechanics basics
+let advanceInterval;
+let drawInterval;
+let x=Math.floor(grid_width/2);
+let y=0;
+
 // Block properties
 const blockSize = 20;
-const blockType = [1,2,3,4,5];
+const blockType = ["straight","square","skew","T","L"];
 let currentBlockType = blockType[Math.floor(Math.random()*5)];
+let currentBlockProps;
+let or = 0;
 
 // Console properties
 const consoleGrid = document.querySelector("#console");
@@ -34,15 +42,115 @@ consoleGrid.width = grid_width*blockSize;
 
 const skeletonGrid = document.querySelector('#skeletonConsole');
 
-// Mechanics basics
-let advanceInterval;
-let drawInterval;
-let x=Math.floor(grid_width/2);
-let y=0;
+function buildStraight(y,x,or) {
+    let straightCoords;
+    let colour = 1;
+
+    if (or === 2) {
+        or = 0;
+    } else if (or === 3) {
+        or = 1;
+    }
+
+    switch (or) {
+        case 0:
+            straightCoords = [[y,x],[y+1,x],[y+2,x],[y+3,x]];
+            break;
+        case 1:
+            straightCoords = [[y,x],[y,x+1],[y,x+2],[y,x+3]];
+            break;
+    }
+    return [straightCoords, colour];
+}
+
+function buildSquare(y,x) {
+    let colour = 2;
+    return [[[y,x],[y,x+1],[y+1,x],[y+1,x+1]], colour]
+}
+
+function buildSkew(y,x,or) {
+    let skewCoords;
+    let colour = 3;
+
+    if (or === 2) {
+        or = 0;
+    } else if (or === 3) {
+        or = 1;
+    }
+
+    switch (or) {
+        case 0:
+            skewCoords = [[y,x],[y,x+1],[y+1,x-1],[y+1,x]];
+            break;
+        case 1:
+            skewCoords = [[y,x],[y+1,x],[y+1,x+1],[y+2,x+1]];
+            break;
+    }
+
+    return [skewCoords, colour];
+}
+
+function buildT(y,x,or) {
+    let Tcoords;
+    let colour = 4;
+    switch (or) {
+        case 0:
+            Tcoords =  [[y,x],[y+1,x-1],[y+1,x],[y+1,x+1]];
+            break;
+        case 1:
+            Tcoords = [[y,x],[y+1,x],[y+1,x+1],[y+2,x]];
+            break;
+        case 2:
+            Tcoords = [[y,x-1],[y,x],[y,x+1],[y+1,x]];
+            break;
+        case 3:
+            Tcoords =  [[y,x],[y+1,x-1],[y+1,x],[y+2,x]];
+            break;
+    }
+
+    return [Tcoords, colour];
+}
+
+function buildL(y,x,or) {
+    let Lcoords;
+    let colour = 5;
+    switch (or) {
+        case 0:
+            Lcoords = [[y,x],[y+1,x],[y+2,x],[y+2,x+1]];
+            break;
+        case 1:
+            Lcoords = [[y,x],[y,x+1],[y,x+2],[y+1,x]];
+            break;
+        case 2:
+            Lcoords = [[y,x],[y,x+1],[y+1,x+1],[y+2,x+1]];
+            break;
+        case 3:
+            Lcoords = [[y+1,x],[y+1,x+1],[y+1,x+2],[y,x+2]];
+            break;
+    }
+
+    return [Lcoords, colour];
+}
+
+function buildCurrentBlock() {
+    switch (currentBlockType) {
+        case "straight":
+            return buildStraight(y,x,or);
+        case "square": 
+            return buildSquare(y,x);
+        case "skew":
+            return buildSkew(y,x,or);
+        case "T": 
+            return buildT(y,x,or);
+        case "L":
+            return buildL(y,x,or);
+    }
+}
 
 function positionBlock() {
-    // Set the position of the block in the skeleton
-    new_grid[y][x] = currentBlockType;
+    let coords = currentBlockProps[0];
+    let colour = currentBlockProps[1];
+    coords.forEach(coord => new_grid[coord[0]][coord[1]]=colour);
 }
 
 function drawBlock(row, col, colour) {
@@ -92,14 +200,60 @@ function drawSkeleton() {
     skeletonGrid.innerHTML = test_string;
 }
 
+function isCollision(direction) {
+    let collisionMap;
+
+    switch (direction) {
+        case "down":
+            collisionMap = currentBlockProps[0].map(coord => {
+                if (coord[0] < grid_height-1 && grid[coord[0]+1][coord[1]] === 0) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
+            break;
+        case "left":
+            collisionMap = currentBlockProps[0].map(coord => {
+                if (coord[1] > 0 && grid[coord[0]][coord[1]-1] === 0) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
+            break;
+        case "right":
+            collisionMap = currentBlockProps[0].map(coord => {
+                if (coord[1] < grid_width-1 && grid[coord[0]][coord[1]+1] === 0) {
+                    return 0;
+                } else {
+                    return 1;
+               }
+            });
+    }
+
+    let collisionStatus = collisionMap.reduce((val1, val2) => val1 + val2);
+    if (collisionStatus > 0 ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function keyDownHandler(e) {
     // Handle user input
-    if (e.key === 'ArrowLeft' && x > 0 && grid[y][x-1] === 0) {
+    if (e.key === 'ArrowLeft' && !(isCollision("left"))) {
         x -= 1;
-    } else if (e.key === "ArrowRight" && x < grid_width-1 && grid[y][x+1] === 0) {
+    } else if (e.key === "ArrowRight" && !(isCollision("right"))) {
         x += 1;
-    } else if (e.key === "ArrowDown" && y < grid_height-1 && grid[y+1][x] === 0) {
+    } else if (e.key === "ArrowDown" && !(isCollision("down"))) {
         y += 1;
+    } else if (e.key === "ArrowUp") {
+        if (or === 3) {
+            or = 0;
+        } else {
+            or += 1;
+        }
     }
     draw();
     e.preventDefault();
@@ -108,19 +262,23 @@ document.addEventListener('keydown', keyDownHandler);
 
 function advance() {
     // Automatically move the block down the y axis
-    if (y < grid_height-1 && grid[y+1][x] === 0) {
-        y+=1;
-    } else {
+    // if (y < grid_height-1 && grid[y+1][x] === 0) {
+    if (isCollision("down")) {
         x=Math.floor(grid_width/2);
         y=0;
+        or=0;
         currentBlockType = blockType[Math.floor(Math.random()*5)];
         grid = structuredClone(new_grid);
+    } else {
+        y+=1;
     }
 }
 
 function draw() {
     // Refresh the skeleton and the console
     new_grid = structuredClone(grid);
+    
+    currentBlockProps = buildCurrentBlock()
     positionBlock();
     drawGrid();
     drawSkeleton();
@@ -135,6 +293,8 @@ function start() {
         advanceInterval = setInterval(advance, 500)
         drawInterval = setInterval(draw, 500);
     }
+
+    console.log("game in play");
 }
 
 function stop() {
@@ -143,4 +303,6 @@ function stop() {
     clearInterval(drawInterval);
     advanceInterval = null;
     drawInterval = null;
+
+    console.log("game out of play");
 }
