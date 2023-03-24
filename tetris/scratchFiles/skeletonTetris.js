@@ -16,8 +16,8 @@ const clear_grid = [
     [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0]
 ]
-let new_grid;
 let grid = structuredClone(clear_grid);
+let new_grid;
 let grid_width = grid[0].length
 let grid_height = grid.length
 
@@ -41,6 +41,9 @@ consoleGrid.height = grid_height*blockSize;
 consoleGrid.width = grid_width*blockSize;
 
 const skeletonGrid = document.querySelector('#skeletonConsole');
+
+let score = 0;
+const scoreLabel = document.querySelector("#score");
 
 function buildStraight(y,x,or) {
     let straightCoords;
@@ -155,10 +158,13 @@ function positionBlock() {
 
 function drawBlock(row, col, colour) {
     // Draw a single block at (row,col) with colour
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.rect(col*blockSize, row*blockSize,blockSize,blockSize);
     ctx.fillStyle = colour;
     ctx.fill();
+    ctx.stroke();
     ctx.closePath();
 }
 
@@ -233,14 +239,6 @@ function isCollision(direction) {
                }
             });
             break;
-
-        case "rotate":
-            collisionMap = currentBlockProps[0].map(coord => {
-                if (coord[1]) {
-
-                }
-            });
-            break;
     }
 
     let collisionStatus = collisionMap.reduce((val1, val2) => val1 + val2);
@@ -273,15 +271,56 @@ function keyDownHandler(e) {
 }
 document.addEventListener('keydown', keyDownHandler);
 
+function isGameOver() {
+    // Check if there if blocks are stacked to the ceiling
+    let i = 0;
+     while (i < grid_width) {
+
+        if (grid[0][i] > 0) {
+            ctx.font = "24px monospace";
+            ctx.fillStyle = "rgb(255,255,255)";
+            ctx.textAlign = "center";
+            ctx.fillText("GAME OVER", grid_width*blockSize/2, grid_height*blockSize/2);
+            return true;
+        }
+
+        i++;
+     }
+
+     return false;
+}
+
+function drawScore() {
+    scoreLabel.innerHTML = `score: ${score}`
+}
+
+function checkCompleteRows() {
+    for (let row=0; row<grid_height; row++) {
+        if (grid[row].indexOf(0) < 0) {
+            score += 1;
+            grid.splice(row,1);
+            grid.unshift(clear_grid[0]);
+        }
+    }
+
+    drawScore();
+}
+
 function advance() {
     // Automatically move the block down the y axis
-    
+
     if (isCollision("down")) {
-        x=Math.floor(grid_width/2);
-        y=0;
-        or=0;
-        currentBlockType = blockType[Math.floor(Math.random()*5)];
-        grid = structuredClone(new_grid);
+        if (!isGameOver()) {
+            x=Math.floor(grid_width/2);
+            y=0;
+            or=0;
+            currentBlockType = blockType[Math.floor(Math.random()*5)];
+            grid = structuredClone(new_grid);
+            checkCompleteRows();
+        } else {
+            stop();
+            console.log("game over");
+        }
     } else {
         y+=1;
     }
@@ -289,16 +328,20 @@ function advance() {
 
 function draw() {
     // Refresh the skeleton and the console
-    new_grid = structuredClone(grid);
+
+    if (!isGameOver()) {
+        new_grid = structuredClone(grid);
     
-    currentBlockProps = buildCurrentBlock(or)
-    positionBlock();
-    drawGrid();
-    drawSkeleton();
+        currentBlockProps = buildCurrentBlock(or)
+        positionBlock();
+        drawGrid();
+        // drawSkeleton();
+    }
 }
 
 function start() {
     // Initialize a new game
+    score = 0;
     grid = structuredClone(clear_grid);
     y=0;
 
