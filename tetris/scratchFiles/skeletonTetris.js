@@ -275,7 +275,7 @@ document.addEventListener('keydown', keyDownHandler);
 
 function advance() {
     // Automatically move the block down the y axis
-    // if (y < grid_height-1 && grid[y+1][x] === 0) {
+    
     if (isCollision("down")) {
         x=Math.floor(grid_width/2);
         y=0;
