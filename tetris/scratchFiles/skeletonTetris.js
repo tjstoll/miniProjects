@@ -57,7 +57,7 @@ function buildStraight(y,x,or) {
             straightCoords = [[y,x],[y+1,x],[y+2,x],[y+3,x]];
             break;
         case 1:
-            straightCoords = [[y,x],[y,x+1],[y,x+2],[y,x+3]];
+            straightCoords = [[y,x-2],[y,x-1],[y,x],[y,x+1]];
             break;
     }
     return [straightCoords, colour];
@@ -119,20 +119,20 @@ function buildL(y,x,or) {
             Lcoords = [[y,x],[y+1,x],[y+2,x],[y+2,x+1]];
             break;
         case 1:
-            Lcoords = [[y,x],[y,x+1],[y,x+2],[y+1,x]];
+            Lcoords = [[y,x-1],[y,x],[y,x+1],[y+1,x-1]];
             break;
         case 2:
             Lcoords = [[y,x],[y,x+1],[y+1,x+1],[y+2,x+1]];
             break;
         case 3:
-            Lcoords = [[y+1,x],[y+1,x+1],[y+1,x+2],[y,x+2]];
+            Lcoords = [[y+1,x-1],[y+1,x],[y+1,x+1],[y,x+1]];
             break;
     }
 
     return [Lcoords, colour];
 }
 
-function buildCurrentBlock() {
+function buildCurrentBlock(or) {
     switch (currentBlockType) {
         case "straight":
             return buildStraight(y,x,or);
@@ -213,6 +213,7 @@ function isCollision(direction) {
                 }
             });
             break;
+
         case "left":
             collisionMap = currentBlockProps[0].map(coord => {
                 if (coord[1] > 0 && grid[coord[0]][coord[1]-1] === 0) {
@@ -222,6 +223,7 @@ function isCollision(direction) {
                 }
             });
             break;
+
         case "right":
             collisionMap = currentBlockProps[0].map(coord => {
                 if (coord[1] < grid_width-1 && grid[coord[0]][coord[1]+1] === 0) {
@@ -230,6 +232,15 @@ function isCollision(direction) {
                     return 1;
                }
             });
+            break;
+
+        case "rotate":
+            collisionMap = currentBlockProps[0].map(coord => {
+                if (coord[1]) {
+
+                }
+            });
+            break;
     }
 
     let collisionStatus = collisionMap.reduce((val1, val2) => val1 + val2);
@@ -249,10 +260,12 @@ function keyDownHandler(e) {
     } else if (e.key === "ArrowDown" && !(isCollision("down"))) {
         y += 1;
     } else if (e.key === "ArrowUp") {
-        if (or === 3) {
-            or = 0;
-        } else {
-            or += 1;
+        let potential_or = or + 1;
+        potential_or %= 4;
+        currentBlockProps = buildCurrentBlock(potential_or);
+
+        if (!(isCollision("right")) && !(isCollision("left"))) {
+            or = potential_or;
         }
     }
     draw();
@@ -278,7 +291,7 @@ function draw() {
     // Refresh the skeleton and the console
     new_grid = structuredClone(grid);
     
-    currentBlockProps = buildCurrentBlock()
+    currentBlockProps = buildCurrentBlock(or)
     positionBlock();
     drawGrid();
     drawSkeleton();
