@@ -17,9 +17,9 @@
 
         #container {
             display: flex;
-            gap: 30px;
+            /* gap: 30px; */
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         #console {
@@ -29,17 +29,77 @@
         #skeletonConsole {
             font-size: 24px;
         }
+
+        #start_stop {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #start_stop button {
+            width: 100px;
+            height: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            border: none;
+        }
+
+        #startbtn {
+            background-color: rgb(60, 168, 60);
+            color: white;
+        }
+
+        #startbtn:disabled {
+            background-color: rgb(158, 243, 158);
+        }
+
+        #stopbtn {
+            background-color: rgb(126, 80, 212);
+            color: white;
+        }
+
+        #stopbtn:disabled {
+            background-color: rgb(136, 115, 173);
+        }
+
+        .control_row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .controlbtn {
+            height: 50px;
+            width: 50px;
+            background-color: rgb(0, 76, 95);
+            border: none;
+            color: white;
+        }
     </style>
 </head>
 <body onload="draw()">
 
-    <h1>a sort of tetris</h1>
+    <h1>testris</h1>
+    <p>(but still a little janky)</p>
+    <p id="score">score: 0</p>
     <div id="container">
         <canvas id="console"></canvas>
         <p id="skeletonConsole"></p>
     </div>
-    <button onclick="start()">start</button>
-    <button onclick="stop()">stop</button>
+    <div id="start_stop">
+        <button id="startbtn" onclick="start()">start</button>
+        <button id="stopbtn" onclick="stop()">stop</button>
+    </div>
+    <div id="controls">
+        <div class="control_row">
+            <button id="rotatebtn" class="controlbtn">&#8631</button>
+        </div>
+        <div class="control_row">
+            <button id="leftbtn" class="controlbtn">&#8592</button>
+            <button id="downbtn" class="controlbtn">&#8595</button>
+            <button id="rightbtn" class="controlbtn">&#8594</button>
+        </div>
+    </div>
     
     <script src="skeletonTetris.js"></script>
 </body>
