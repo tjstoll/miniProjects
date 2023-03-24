@@ -1,6 +1,6 @@
 'use strict';
 
-// Skeletion grid properties
+// Skeletion previous_grid properties
 const clear_grid = [
     [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0],
@@ -16,10 +16,10 @@ const clear_grid = [
     [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0]
 ]
-let grid = structuredClone(clear_grid);
-let new_grid;
-let grid_width = grid[0].length
-let grid_height = grid.length
+let previous_grid = structuredClone(clear_grid);
+let current_grid = structuredClone(previous_grid);
+let grid_width = previous_grid[0].length
+let grid_height = previous_grid.length
 
 // Mechanics basics
 let advanceInterval;
@@ -42,8 +42,17 @@ consoleGrid.width = grid_width*blockSize;
 
 const skeletonGrid = document.querySelector('#skeletonConsole');
 
+// Score
 let score = 0;
 const scoreLabel = document.querySelector("#score");
+
+// Buttons
+const startButton = document.querySelector("#startbtn");
+const stopButton = document.querySelector("#stopbtn");
+const rotateButton = document.querySelector("#rotatebtn");
+const leftButton = document.querySelector("#leftbtn");
+const downButton = document.querySelector("#downbtn");
+const rightButton = document.querySelector("#rightbtn");
 
 function buildStraight(y,x,or) {
     let straightCoords;
@@ -153,7 +162,7 @@ function buildCurrentBlock(or) {
 function positionBlock() {
     let coords = currentBlockProps[0];
     let colour = currentBlockProps[1];
-    coords.forEach(coord => new_grid[coord[0]][coord[1]]=colour);
+    coords.forEach(coord => current_grid[coord[0]][coord[1]]=colour);
 }
 
 function drawBlock(row, col, colour) {
@@ -169,13 +178,13 @@ function drawBlock(row, col, colour) {
 }
 
 function drawGrid() {
-    // Flesh out the grid from the skeleton
+    // Flesh out the previous_grid from the skeleton
     ctx.clearRect(0,0,grid_width*blockSize,grid_height*blockSize);
     
     for (let row=0; row<grid_height; row++) {
         for (let col=0; col<grid_width; col++) {
             
-            switch (new_grid[row][col]) {
+            switch (current_grid[row][col]) {
                 case 1:
                     drawBlock(row, col, "cyan");
                     break;
@@ -201,7 +210,7 @@ function drawSkeleton() {
     // Display the skeleton
     let test_string = '';
     for (let row=0; row<grid_height; row++) {
-        test_string += new_grid[row].join('') + '<br>';
+        test_string += current_grid[row].join('') + '<br>';
     }
     skeletonGrid.innerHTML = test_string;
 }
@@ -212,7 +221,7 @@ function isCollision(direction) {
     switch (direction) {
         case "down":
             collisionMap = currentBlockProps[0].map(coord => {
-                if (coord[0] < grid_height-1 && grid[coord[0]+1][coord[1]] === 0) {
+                if (coord[0] < grid_height-1 && previous_grid[coord[0]+1][coord[1]] === 0) {
                     return 0;
                 } else {
                     return 1;
@@ -222,7 +231,7 @@ function isCollision(direction) {
 
         case "left":
             collisionMap = currentBlockProps[0].map(coord => {
-                if (coord[1] > 0 && grid[coord[0]][coord[1]-1] === 0) {
+                if (coord[1] > 0 && previous_grid[coord[0]][coord[1]-1] === 0) {
                     return 0;
                 } else {
                     return 1;
@@ -232,7 +241,7 @@ function isCollision(direction) {
 
         case "right":
             collisionMap = currentBlockProps[0].map(coord => {
-                if (coord[1] < grid_width-1 && grid[coord[0]][coord[1]+1] === 0) {
+                if (coord[1] < grid_width-1 && previous_grid[coord[0]][coord[1]+1] === 0) {
                     return 0;
                 } else {
                     return 1;
@@ -271,12 +280,45 @@ function keyDownHandler(e) {
 }
 document.addEventListener('keydown', keyDownHandler);
 
+function rotateButtonHandler() {
+    let potential_or = or + 1;
+    potential_or %= 4;
+    currentBlockProps = buildCurrentBlock(potential_or);
+
+    if (!(isCollision("right")) && !(isCollision("left"))) {
+        or = potential_or;
+    }
+    draw();
+}
+function leftButtonHandler() {
+    if (!isCollision("left")) {
+        x -= 1;
+    }
+    draw();
+}
+function rightButtonHandler() {
+    if (!isCollision("right")) {
+        x += 1;
+    }
+    draw();
+}
+function downButtonHandler() {
+    if (!isCollision("down")) {
+        y += 1
+    }
+    draw();
+}
+rotateButton.addEventListener("mousedown", rotateButtonHandler);
+leftButton.addEventListener("mousedown", leftButtonHandler);
+rightButton.addEventListener("mousedown", rightButtonHandler);
+downButton.addEventListener("mousedown", downButtonHandler);
+
 function isGameOver() {
     // Check if there if blocks are stacked to the ceiling
     let i = 0;
      while (i < grid_width) {
 
-        if (grid[0][i] > 0) {
+        if (previous_grid[0][i] > 0) {
             ctx.font = "24px monospace";
             ctx.fillStyle = "rgb(255,255,255)";
             ctx.textAlign = "center";
@@ -296,10 +338,10 @@ function drawScore() {
 
 function checkCompleteRows() {
     for (let row=0; row<grid_height; row++) {
-        if (grid[row].indexOf(0) < 0) {
+        if (previous_grid[row].indexOf(0) < 0) {
             score += 1;
-            grid.splice(row,1);
-            grid.unshift(clear_grid[0]);
+            previous_grid.splice(row,1);
+            previous_grid.unshift(clear_grid[0]);
         }
     }
 
@@ -307,15 +349,17 @@ function checkCompleteRows() {
 }
 
 function advance() {
-    // Automatically move the block down the y axis
-
+    // Check if piece has collided with something
+    // or else advance y coordinate
     if (isCollision("down")) {
+        // If game is not over reset coords, pick new block, set old previous_grid to current previous_grid, eliminate full rows
+        // or else stop the game
         if (!isGameOver()) {
             x=Math.floor(grid_width/2);
             y=0;
             or=0;
             currentBlockType = blockType[Math.floor(Math.random()*5)];
-            grid = structuredClone(new_grid);
+            previous_grid = structuredClone(current_grid);
             checkCompleteRows();
         } else {
             stop();
@@ -327,11 +371,9 @@ function advance() {
 }
 
 function draw() {
-    // Refresh the skeleton and the console
-
+    // If game is not over position the current block and render
     if (!isGameOver()) {
-        new_grid = structuredClone(grid);
-    
+        current_grid = structuredClone(previous_grid);
         currentBlockProps = buildCurrentBlock(or)
         positionBlock();
         drawGrid();
@@ -341,9 +383,12 @@ function draw() {
 
 function start() {
     // Initialize a new game
+    startButton.disabled = true;
     score = 0;
-    grid = structuredClone(clear_grid);
+    previous_grid = structuredClone(clear_grid);
     y=0;
+    x=Math.floor(grid_width/2);
+    or=0;
 
     if (!advanceInterval && !drawInterval) {
         advanceInterval = setInterval(advance, 500)
@@ -360,5 +405,6 @@ function stop() {
     advanceInterval = null;
     drawInterval = null;
 
+    startButton.disabled = false;
     console.log("game out of play");
 }
