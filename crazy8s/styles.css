@@ -2,6 +2,47 @@ html {
     font-family: 'Courier New', Courier, monospace;
 }
 
-ul {
-    list-style: none;
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    height: 4em;
+    width: 3em;
+    border: 1px solid black;
+    border-radius: 0.25em;
+}
+
+#gameArea {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+#playArea {
+    display: flex;
+    justify-content: space-around;
+}
+
+.hand {
+    display: flex;
+    gap: 0 0.5em;
+}
+
+#playerCards button {
+    background-color: white;
+}
+
+#playDeck button {
+    background-color: white;
+}
+
+#drawDeck button {
+    background-color: rgb(0, 203, 253);
+}
+
+#opponentCards button {
+    background-color: rgb(0, 203, 253);
 }
