@@ -1,6 +1,6 @@
 'use strict';
 
-class Game {
+class Operation {
     constructor() {
         this.drawDeck = [];
         this.playDeck = [];
@@ -59,15 +59,73 @@ class Game {
     }
 
     play(cards, hand) {
+        this.playDeck.push(...cards);
+        for (let card of cards ) {
+            hand.splice(hand.indexOf(card), 1);
+        }
     }
 }
 
-const game = new Game();
-game.buildInitialDeck();
-game.shuffle();
-game.deal(8, game.opponentHand);
-game.deal(8, game.playerHand);
-game.flipCard();
+class UI {
+    constructor() {
+        this.opponentCards = document.querySelector('#opponentCards');
+        this.playDeck = document.querySelector("#playDeck");
+        this.drawDeck = document.querySelector("#drawDeck");
+        this.playerCards = document.querySelector("#playerCards");
+    }
+
+    updatePlayerCards(cards) {
+        this.playerCards.innerHTML = "";
+        for (let card of cards) {
+            let newCardButton = document.createElement("button");
+
+            let newCardsButtonText = document.createTextNode(card);
+            newCardButton.appendChild(newCardsButtonText);
+            this.playerCards.appendChild(newCardButton);
+        }
+    }
+
+    updateOpponentCards(numberOfCards) {
+        this.opponentCards.innerHTML = "";
+        for (let c=0; c<numberOfCards; c++) {
+            let newCardButton = document.createElement("button");
+            let newCardsButtonText = document.createTextNode("🐒");
+            newCardButton.appendChild(newCardsButtonText);
+            this.opponentCards.appendChild(newCardButton);
+        }
+    }
+
+    updateplayDeck(deck) {
+        this.playDeck.innerHTML = "";
+        let topCard = document.createElement('button');
+        let topCardText = document.createTextNode(deck.pop());
+        topCard.appendChild(topCardText);
+        this.playDeck.appendChild(topCard);
+    }
+
+    updateDrawDeck(deck) {
+        this.drawDeck.innerHTML = "";
+        let topCard = document.createElement('button');
+        let topCardText = document.createTextNode(`(${deck.length})`);
+        topCard.appendChild(topCardText);
+        this.drawDeck.appendChild(topCard);
+    }
+}
+
+// Testing
+
+const operation = new Operation();
+operation.buildInitialDeck();
+operation.shuffle();
+operation.deal(8, operation.opponentHand);
+operation.deal(8, operation.playerHand);
+operation.flipCard();
+
+const ui = new UI();
+ui.updatePlayerCards(operation.playerHand);
+ui.updateOpponentCards(operation.opponentHand.length);
+ui.updateplayDeck(operation.playDeck);
+ui.updateDrawDeck(operation.drawDeck);
 
 // const oppsDiv = document.getElementsByTagName("#opponent");
 // const oppsCards = d
