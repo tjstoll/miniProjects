@@ -17,23 +17,30 @@ let redraw;
 const blockSize = 15;
 
 // Physics
-let dx = 3;
-let dy = 3;
-let x;
-let y;
+const player = {
+    dx: 3,
+    dy: 3,
+    x: 0,
+    y: 0,
+    colour: "rgb(0,0,0)"
+}
+
+const opponent = {
+    dx: 1.5,
+    dy: 1.5,
+    x: 0,
+    y: 0,
+    colour: "rgb(255,0,0)"
+}
 
 // Controls
 const playButton = document.querySelector('#play');
-let keyState = ''
-let leftPressed = false;
-let rightPressed = false;
-let upPressed = false;
-let downPressed = false;
+let keyState = '';
 
-function drawBlock(x,y) {
+function drawBlock(x,y,colour) {
     ctx.beginPath();
     ctx.rect(x,y,blockSize,blockSize);
-    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillStyle = colour;
     ctx.fill();
     ctx.closePath();
 }
@@ -41,70 +48,117 @@ function drawBlock(x,y) {
 function keyDownHandler(e) {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
         keyState = 'right';
-        leftPressed = false;
-        rightPressed = true;
-        upPressed = false;
-        downPressed = false;
     }
 
     if (e.key === 'Left' || e.key === 'ArrowLeft') {
-        keyState = 'left'
-        leftPressed = true;
-        rightPressed = false;
-        upPressed = false;
-        downPressed = false;
+        keyState = 'left';
     }
 
     if (e.key === 'Up' || e.key === 'ArrowUp') {
         keyState = 'up';
-        leftPressed = false;
-        rightPressed = false;
-        upPressed = true;
-        downPressed = false;
     }
 
     if (e.key === 'Down' || e.key === 'ArrowDown') {
-        keyState = 'down'
-        leftPressed = false;
-        rightPressed = false;
-        upPressed = false;
-        downPressed = true;
+        keyState = 'down';
     }
 
-    console.log(keyState);
     e.preventDefault();
 }
 
+// Currently disabled
 function keyUpHandler(e) {
     keyState = '';
-    leftPressed = false;
-    rightPressed = false;
-    upPressed = false;
-    downPressed = false;
-    console.log(keyState);
+}
+
+function updatePlayerPosition() {
+switch (keyState) {
+        case 'right':
+            if (player.x <= canvasWidth-blockSize) {
+                player.x+=player.dx;
+            } 
+            break;
+        case 'left':
+            if (player.x >= 0) {
+                player.x-=player.dx;
+            }
+            break;
+        case 'up':
+            if (player.y >= 0) {
+                player.y-=player.dy;
+            }
+            break;
+        case 'down':
+            if (player.y <= canvasHeight-blockSize) {
+                player.y+=player.dy;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+function updateOpponentPosition() {
+    // determine which direction to move
+    // if x distance is more than y distance -> move x
+        //
+    // else move y
+
+    let xDistance = player.x - opponent.x;
+    let yDistance = player.y - opponent.y;
+
+    if (Math.abs(xDistance) > blockSize) {
+        if (xDistance > 0) {
+            opponent.x += opponent.dx;
+        } else {
+            opponent.x -= opponent.dx
+        }
+    } else {
+        if (yDistance > 0) {
+            opponent.y += opponent.dy;
+        } else {
+            opponent.y -= opponent.dy;
+        }
+    }
+}
+
+function gameOver() {
+    return Math.abs(player.x-opponent.x) < blockSize && Math.abs(player.y-opponent.y) < blockSize;
 }
 
 function update() {
     ctx.clearRect(0,0,canvasWidth,canvasHeight);
 
-    switch (keyState) {
-        case 'right':
-            x+=dx;
-            break;
-        case 'left':
-            x-=dx;
-            break;
-        case 'up':
-            y-=dy
-            break;
-        case 'down':
-            y+=dy;
-            break;
+    if (gameOver()) {
+        console.log('game over');
+        stop();
+        return;
     }
 
-    drawBlock(x,y);
+    updatePlayerPosition();
+    //updateOpponentPosition();
+
+    drawBlock(player.x,player.y, player.colour);
+    drawBlock(opponent.x,opponent.y,opponent.colour);
     // requestAnimationFrame(update);
     redraw = animation(update);
+}
+
+function spawn() {
+    player.x = Math.random()*canvasWidth;
+    player.y = Math.random()*canvasHeight;
+
+    if (player.x+100 < canvasWidth-blockSize) {
+        opponent.x = player.x + 100;
+    } else {
+        opponent.x = player.x - 100;
+    }
+
+    if (player.y+100 < canvasHeight-blockSize) {
+        opponent.y = player.y + 100;
+    } else {
+        opponent.y = player.y - 100;
+    }
+
 }
 
 function stop() {
@@ -118,11 +172,12 @@ function play() {
     playButton.removeEventListener('click', play);
     playButton.addEventListener('click', stop);
     playButton.innerHTML = 'stop';
-    x = (canvasWidth - blockSize)/2
-    y = (canvasWidth - blockSize)/2
-    drawBlock(x,y);
-    document.addEventListener("keydown", keyDownHandler, false);
-    document.addEventListener("keyup", keyUpHandler, false);
+
+    keyState = '';
+    spawn();
+
+    document.addEventListener("keydown", keyDownHandler);
+    // document.addEventListener("keyup", keyUpHandler, false);
     update();
 }
 playButton.addEventListener('click', play);
