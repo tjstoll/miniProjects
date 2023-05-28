@@ -8,6 +8,34 @@ canvas.height = canvasHeight;
 canvas.width = canvasWidth;
 const ctx = canvas.getContext('2d');
 
+// Map Stuff
+const originalLevel1 = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,1,0,0,1,1,0,0,0,0,0],
+    [0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
+    [0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
+    [0,0,0,0,1,1,1,1,1,1,0,0,0,0,0],
+    [0,0,0,1,0,0,1,1,0,0,1,0,0,0,0],
+    [0,0,1,0,0,1,0,0,1,0,0,1,0,0,0],
+    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,1,1,0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
+let level1;
+const mapColour = {
+    background: 'rgb(0,9,26)',
+    inactive: 'rgb(0, 36, 102)',
+    active: 'rgb(0, 71, 204)'
+}
+let score;
+const maxScore = 38;
+
+
 // Animation controls
 const animation = requestAnimationFrame;
 const cancelanimation = cancelAnimationFrame;
@@ -26,8 +54,8 @@ const player = {
 }
 
 const opponent = {
-    dx: 1.5,
-    dy: 1.5,
+    dx: 1,
+    dy: 1,
     x: 0,
     y: 0,
     colour: "rgb(255, 0, 102)"
@@ -75,49 +103,34 @@ function keyUpHandler(e) {
 }
 
 // Deactivated currently
-function collision(character, direction) {
-    let collisionDetected;
-    let mapX = Math.floor(character.x/blockSize);
-    let mapY = Math.floor(character.y/blockSize);
-    switch (direction) {
-        case 'down':
-            mapY += 1;
-            break;
-        case 'right':
-            mapX += 1;
-            break;
-        case 'left':
-            // mapY -= 1;
-            break;
-        case 'up':
-            // mapY -=1;
-            break;
+function updateMap() {
+    let mapX = Math.floor((player.x+blockSize/2)/blockSize);
+    let mapY = Math.floor((player.y+blockSize/2)/blockSize);
+    if (level1[mapY][mapX] == 1) {
+        level1[mapY][mapX] = 2;
+        score++;
     }
-
-    collisionDetected = level1[mapY][mapX] == 1;
-
-    return collisionDetected
 }
 
 function updatePlayerPosition() {
     switch (keyState) {
         case 'right':
-            if (player.x <= canvasWidth-blockSize) {
+            if (player.x + player.dx <= canvasWidth-blockSize) {
                 player.x+=player.dx;
             } 
             break;
         case 'left':
-            if (player.x >= 0) {
+            if (player.x - player.dx >= 0) {
                 player.x-=player.dx;
             }
             break;
         case 'up':
-            if (player.y >= 0) {
+            if (player.y - player.dy >= 0) {
                 player.y-=player.dy;
             }
             break;
         case 'down':
-            if (player.y <= canvasHeight-blockSize) {
+            if (player.y + player.dy <= canvasHeight-blockSize) {
                 player.y+=player.dy;
             }
             break;
@@ -146,41 +159,63 @@ function updateOpponentPosition() {
 }
 
 function gameOver() {
-    return Math.abs(player.x-opponent.x) < blockSize && Math.abs(player.y-opponent.y) < blockSize;
-}
-
-function update() {
-    ctx.clearRect(0,0,canvasWidth,canvasHeight);
-
-    if (gameOver()) {
-        console.log('game over');
-        stop();
-        return;
+    let youreIt = Math.abs(player.x-opponent.x) < blockSize && Math.abs(player.y-opponent.y) < blockSize;
+    
+    if (youreIt) {
+        ctx.font = '24px monospace';
+        ctx.fillStyle = "rgb(255,255,255)";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER", canvasWidth/2, canvasHeight/2);
     }
-
-    updatePlayerPosition();
-    updateOpponentPosition();
-
-    // drawMap();
-    drawBlock(player.x,player.y, player.colour);
-    drawBlock(opponent.x,opponent.y,opponent.colour);
-    redraw = animation(update);
+    
+    return youreIt;
 }
 
 function drawMap() {
-    for (let row=0; row<20; row++) {
-        for (let col=0; col<20; col++) {
+    for (let row=0; row<level1.length; row++) {
+        for (let col=0; col<level1.length; col++) {
             switch (level1[row][col]) {
                 case 0:
-                    drawBlock(col*blockSize, row*blockSize, 'rgb(0,255,0)');
+                    drawBlock(col*blockSize, row*blockSize, mapColour.background);
                     break;
                 case 1:
-                    drawBlock(col*blockSize, row*blockSize, 'rgb(100,100,100)');
+                    drawBlock(col*blockSize, row*blockSize, mapColour.inactive);
+                    break;
+                case 2:
+                    drawBlock(col*blockSize, row*blockSize, mapColour.active);
                     break;
                 default:
                     break;
             }
         }
+    }
+}
+
+function update() {
+    ctx.clearRect(0,0,canvasWidth,canvasHeight);
+
+    updatePlayerPosition();
+    updateOpponentPosition();
+    updateMap();
+
+    drawMap();
+    drawBlock(player.x,player.y, player.colour);
+    drawBlock(opponent.x,opponent.y,opponent.colour);
+
+    if (gameOver()) {
+        console.log('game over');
+        stop();
+        return;
+    } else if (score == maxScore) {
+        console.log('you win!');
+        ctx.font = '24px monospace';
+        ctx.fillStyle = "rgb(255,255,255)";
+        ctx.textAlign = "center";
+        ctx.fillText("VICTORY!", canvasWidth/2, canvasHeight/2);
+        stop();
+        return;
+    } else {
+        redraw = animation(update);
     }
 }
 
@@ -225,6 +260,9 @@ function play() {
     playButton.innerHTML = 'stop...';
 
     keyState = '';
+    score = 0;
+    level1 = structuredClone(originalLevel1);
+    
     spawn();
 
     document.addEventListener("keydown", keyDownHandler);
