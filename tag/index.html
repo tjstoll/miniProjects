@@ -5,15 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/754f3acd5a.js" crossorigin="anonymous"></script>
     <title>Tag</title>
 </head>
 <body>
     <div id="container">
-        <h1>Tag! You're It!</h1>
+        <h1>tag, you're it!</h1>
         <canvas id="canvas"></canvas>
-        <button id="play">play!</button>
+        <button id="play" class="play">play!</button>
+        <div id="controls">
+            <button id="left"><i class="fa-solid fa-caret-left"></i></button>
+            <button id="up"><i class="fa-solid fa-caret-up"></i></button>
+            <button id="down"><i class="fa-solid fa-caret-down"></i></button>
+            <button id="right"><i class="fa-solid fa-caret-right"></i></button>
+
+        </div>
     </div>
 
+    <script src="level1.js"></script>
     <script src="tag.js"></script>
 </body>
 </html>
