@@ -195,7 +195,7 @@ function update() {
     ctx.clearRect(0,0,canvasWidth,canvasHeight);
 
     updatePlayer1Position();
-    // updatePlayer2Position();
+    updatePlayer2Position();
     updateMap();
 
     drawMap();
