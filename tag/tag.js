@@ -12,17 +12,17 @@ const ctx = canvas.getContext('2d');
 const originalLevel1 = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-    [0,0,0,0,1,1,0,0,1,1,0,0,0,0,0],
-    [0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
-    [0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
-    [0,0,0,0,1,1,1,1,1,1,0,0,0,0,0],
-    [0,0,0,1,0,0,1,1,0,0,1,0,0,0,0],
-    [0,0,1,0,0,1,0,0,1,0,0,1,0,0,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-    [0,0,0,1,1,0,0,0,0,1,1,0,0,0,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,1,1,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
+    [0,0,0,1,1,1,1,1,1,1,1,1,0,0,0],
+    [0,0,1,0,0,1,1,1,1,1,0,0,1,0,0],
+    [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,1,1,0,0,0,0,0,1,1,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ];
@@ -33,7 +33,7 @@ const mapColour = {
     active: 'rgb(0, 71, 204)'
 }
 let score;
-const maxScore = 38;
+const maxScore = originalLevel1.flat().reduce((e1,e2)=>e1+e2,0);
 
 
 // Animation controls
@@ -45,7 +45,7 @@ let redraw;
 const blockSize = 20;
 
 // Physics
-const player = {
+const player1 = {
     dx: 2,
     dy: 2,
     x: 0,
@@ -53,7 +53,7 @@ const player = {
     colour: "rgb(255, 214, 153)"
 }
 
-const opponent = {
+const player2 = {
     dx: 1,
     dy: 1,
     x: 0,
@@ -104,34 +104,34 @@ function keyUpHandler(e) {
 
 // Deactivated currently
 function updateMap() {
-    let mapX = Math.floor((player.x+blockSize/2)/blockSize);
-    let mapY = Math.floor((player.y+blockSize/2)/blockSize);
+    let mapX = Math.floor((player1.x+blockSize/2)/blockSize);
+    let mapY = Math.floor((player1.y+blockSize/2)/blockSize);
     if (level1[mapY][mapX] == 1) {
         level1[mapY][mapX] = 2;
         score++;
     }
 }
 
-function updatePlayerPosition() {
+function updatePlayer1Position() {
     switch (keyState) {
         case 'right':
-            if (player.x + player.dx <= canvasWidth-blockSize) {
-                player.x+=player.dx;
+            if (player1.x + player1.dx <= canvasWidth-blockSize) {
+                player1.x+=player1.dx;
             } 
             break;
         case 'left':
-            if (player.x - player.dx >= 0) {
-                player.x-=player.dx;
+            if (player1.x - player1.dx >= 0) {
+                player1.x-=player1.dx;
             }
             break;
         case 'up':
-            if (player.y - player.dy >= 0) {
-                player.y-=player.dy;
+            if (player1.y - player1.dy >= 0) {
+                player1.y-=player1.dy;
             }
             break;
         case 'down':
-            if (player.y + player.dy <= canvasHeight-blockSize) {
-                player.y+=player.dy;
+            if (player1.y + player1.dy <= canvasHeight-blockSize) {
+                player1.y+=player1.dy;
             }
             break;
         default:
@@ -139,27 +139,27 @@ function updatePlayerPosition() {
     }
 }
 
-function updateOpponentPosition() {
-    let xDistance = player.x - opponent.x;
-    let yDistance = player.y - opponent.y;
+function updatePlayer2Position() {
+    let xDistance = player1.x - player2.x;
+    let yDistance = player1.y - player2.y;
 
     if (Math.abs(xDistance) > blockSize) {
         if (xDistance > 0) {
-            opponent.x += opponent.dx;
+            player2.x += player2.dx;
         } else {
-            opponent.x -= opponent.dx
+            player2.x -= player2.dx
         }
     } else {
         if (yDistance > 0) {
-            opponent.y += opponent.dy;
+            player2.y += player2.dy;
         } else {
-            opponent.y -= opponent.dy;
+            player2.y -= player2.dy;
         }
     }
 }
 
 function gameOver() {
-    let youreIt = Math.abs(player.x-opponent.x) < blockSize && Math.abs(player.y-opponent.y) < blockSize;
+    let youreIt = Math.abs(player1.x-player2.x) < blockSize && Math.abs(player1.y-player2.y) < blockSize;
     
     if (youreIt) {
         ctx.font = '24px monospace';
@@ -194,13 +194,13 @@ function drawMap() {
 function update() {
     ctx.clearRect(0,0,canvasWidth,canvasHeight);
 
-    updatePlayerPosition();
-    updateOpponentPosition();
+    updatePlayer1Position();
+    // updatePlayer2Position();
     updateMap();
 
     drawMap();
-    drawBlock(player.x,player.y, player.colour);
-    drawBlock(opponent.x,opponent.y,opponent.colour);
+    drawBlock(player1.x,player1.y, player1.colour);
+    drawBlock(player2.x,player2.y,player2.colour);
 
     if (gameOver()) {
         console.log('game over');
@@ -220,26 +220,26 @@ function update() {
 }
 
 function spawn() {
-    player.x = Math.random()*canvasWidth;
-    player.y = Math.random()*canvasHeight;
+    player1.x = Math.random()*canvasWidth;
+    player1.y = Math.random()*canvasHeight;
 
-    if (player.x+100 < canvasWidth-blockSize) {
-        opponent.x = player.x + 100;
+    if (player1.x+100 < canvasWidth-blockSize) {
+        player2.x = player1.x + 100;
     } else {
-        opponent.x = player.x - 100;
+        player2.x = player1.x - 100;
     }
 
-    if (player.y+100 < canvasHeight-blockSize) {
-        opponent.y = player.y + 100;
+    if (player1.y+100 < canvasHeight-blockSize) {
+        player2.y = player1.y + 100;
     } else {
-        opponent.y = player.y - 100;
+        player2.y = player1.y - 100;
     }
 
-    // player.x = (canvasWidth-blockSize)/2;
-    // player.y = canvasHeight/4;
+    // player1.x = (canvasWidth-blockSize)/2;
+    // player1.y = canvasHeight/4;
 
-    // opponent.x = (canvasWidth-blockSize)/2;
-    // opponent.y = 3*canvasWidth/4 
+    // player2.x = (canvasWidth-blockSize)/2;
+    // player2.y = 3*canvasWidth/4 
 
 }
 
