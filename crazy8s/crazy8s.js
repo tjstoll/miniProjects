@@ -6,6 +6,7 @@ class Operation {
         this.playDeck = [];
         this.playerHand = [];
         this.opponentHand = [];
+        this.cardsToPlay = [];
     }
 
     buildInitialDeck() {
@@ -13,13 +14,13 @@ class Operation {
         const cardSuit = ['♠', '♣', '♥', '♦'];
         const numberOfCards = cardValue.length*cardSuit.length;
         for (let c=0; c<numberOfCards; c++) {
-            let card = cardValue[c%cardValue.length] + cardSuit[Math.floor(c/13)%cardSuit.length];
+            let card = cardSuit[Math.floor(c/13)%cardSuit.length] + cardValue[c%cardValue.length];
             this.drawDeck.push(card);
         }
     }
 
     flipCard(qty = 1) {
-        this.playDeck = this.drawDeck.splice(0,qty);
+        this.playDeck.push(...this.drawDeck.splice(0,qty));
     }
 
     shuffle() {
@@ -81,6 +82,13 @@ class UI {
 
             let newCardsButtonText = document.createTextNode(card);
             newCardButton.appendChild(newCardsButtonText);
+
+            newCardButton.id = card;
+            newCardButton.classList.add('playerCard');
+            // newCardButton.addEventListener('click', ()=> {
+            //     newCardButton.innerHTML = "-";
+            // });
+
             this.playerCards.appendChild(newCardButton);
         }
     }
@@ -98,7 +106,7 @@ class UI {
     updateplayDeck(deck) {
         this.playDeck.innerHTML = "";
         let topCard = document.createElement('button');
-        let topCardText = document.createTextNode(deck.pop());
+        let topCardText = document.createTextNode(deck.slice(-1));
         topCard.appendChild(topCardText);
         this.playDeck.appendChild(topCard);
     }
@@ -112,8 +120,19 @@ class UI {
     }
 }
 
+function playerTurn() {
+    const playerCardButtons = document.querySelectorAll('.playerCard');
+    for (let cardButton of playerCardButtons) {
+        cardButton.addEventListener('click', () => {
+            operation.cardsToPlay.push(cardButton.id);
+            cardButton.style.backgroundColor = 'red';
+        })
+    }
+}
+
 // Testing
 
+// Build Game Pieces:
 const operation = new Operation();
 operation.buildInitialDeck();
 operation.shuffle();
@@ -121,81 +140,33 @@ operation.deal(8, operation.opponentHand);
 operation.deal(8, operation.playerHand);
 operation.flipCard();
 
+// Build Initial UI
 const ui = new UI();
 ui.updatePlayerCards(operation.playerHand);
 ui.updateOpponentCards(operation.opponentHand.length);
 ui.updateplayDeck(operation.playDeck);
 ui.updateDrawDeck(operation.drawDeck);
 
-// const oppsDiv = document.getElementsByTagName("#opponent");
-// const oppsCards = d
-// const playerDiv = document.getElementsByTagName("#player");
+class Game {
+    constructor() {
+        this.playerTurn = true;
+    }
 
-// // Initialize global objects
-// let drawDeck = [];
-// let playDeck = [];
-// let playerHand = [];
-// let opponentHand = [];
+    // Build game pieces
 
-// // Build the initial deck
-// const cardValue = ['A','2','3','4','5','6','7','8','9','10','J','K','Q'];
-// const cardSuit = ['♠', '♣', '♥', '♦'];
-// const numberOfCards = cardValue.length*cardSuit.length;
-// for (let c=0; c<numberOfCards; c++) {
-//     let card = cardValue[c%cardValue.length] + cardSuit[Math.floor(c/13)%cardSuit.length];
-//     drawDeck.push(card);
-// }
+    play() {
+        // check if play is legal
+        // send error message if not
+        // play cards if so
+    }
 
-// // Operations
-// function shuffle(originalDeck) {
-//     let originalDeckLength = originalDeck.length;
-//     let shuffledDeckLength = 0;
-//     let shuffledDeck = [];
+    playerTurn() {
+        // add listeners to cards
+        // listener: click -> add card to cardstoplay; change button style
+        // call play
+    }
 
-//     while (shuffledDeckLength != originalDeckLength) {
-//         let updatedDeckLength = originalDeckLength - shuffledDeckLength;
-//         let randomIndex = Math.floor(Math.random()*updatedDeckLength);
-//         let newCard = originalDeck[randomIndex];
-
-//         shuffledDeck.push(newCard);
-//         originalDeck.splice(randomIndex, 1);
-
-//         shuffledDeckLength++;
-//     }
-
-//     return shuffledDeck;
-// }
-
-// function turnOverDeck(oldPlayDeck) {
-//     let newPlayDeck = [];
-//     const topCard = oldPlayDeck.pop();
-
-//     newPlayDeck.push(topCard);
-//     const newDrawDeck = shuffle(oldPlayDeck);
-
-//     return newDrawDeck;
-// }
-
-// function deal(drawDeck, hand, qty) {
-//     let deckLength = drawDeck.length;
-//     if (deckLength>qty) {
-//         hand.push(...drawDeck.splice(0, qty));
-//         return [drawDeck, hand];
-//     } else {
-//         hand.push(...drawDeck);
-//         // newDeck = turnOverDeck(playDeck);
-//         // return deal(newDeck, hand, qty-deckLength);
-//     }
-// }
-
-// // Testing
-// let shuffledDeck = shuffle(drawDeck);
-
-// const table = document.createElement('ul');
-// for (let i=0; i<numberOfCards; i++) {
-//     const item = document.createElement('li');
-//     const text = document.createTextNode(shuffledDeck[i]);
-//     item.appendChild(text);
-//     table.appendChild(item);
-// }
-// document.querySelector('body').appendChild(table);
+    opponentTurn() {
+        
+    }
+}
