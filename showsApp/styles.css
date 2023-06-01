@@ -23,3 +23,7 @@ body {
     max-height: 150px;
     overflow-y: scroll;
 }
+
+.summary::-webkit-scrollbar {
+    width: 3px;
+}
