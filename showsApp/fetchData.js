@@ -7,19 +7,19 @@ const baseURL = "https://api.tvmaze.com/search/shows?q=";
 let searchURL = baseURL
 let results;
 
-function searchHandler(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        searchKey = input.value.replaceAll(' ', '%');;
-        searchURL += searchKey;
-        console.log(searchURL);
-        input.value = "";
-        // this should execute once the search has been performed
-        searchURL = baseURL;
-    }
-}
+// function searchHandler(e) {
+//     if (e.key === 'Enter') {
+//         e.preventDefault();
+//         searchKey = input.value.replaceAll(' ', '%');;
+//         searchURL += searchKey;
+//         console.log(searchURL);
+//         input.value = "";
+//         // this should execute once the search has been performed
+//         searchURL = baseURL;
+//     }
+// }
 
-input.addEventListener('keypress', searchHandler);
+// input.addEventListener('keypress', searchHandler);
 
 // Delet this line in production
 results = JSON.parse(data);
