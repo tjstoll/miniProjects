@@ -15,56 +15,84 @@
 
     <h1>My Shows App</h1>
     <div class="container">
-        <form>
-            <p>
-                <input id="search" type="text" name="search" placeholder="Search TV Shows">
-            </p>
-        </form>
-        <div id="search_results"></div>
+    
     </div>
     
     <script src="data.js"></script>
     <script src="fetchData.js"></script>
     <script type="text/babel">
 
-        function Genres(props) {
-            const genres = props.content;
-            const genresString = genres.join(', ');
-
-            return <p>{genresString}</p>
-        }
-
-        function ShowInfo(props) {
-            const info = props.info.show;
-            return (
-                <div className='result'>
-                    <div className="image">
-                        <img src={info.image.medium} alt={info.name} />
-                    </div>
-                    <div className="description">
-                        <div className="info">
-                            <h2>{info.name}</h2>
-                            <p>{info.rating.average}</p>
-                            <Genres content={info.genres}/>
-                        </div>
-                        <div className="summary">
-                            <p>{info.summary}</p>
-                        </div>
-                    </div>
+        {/*
+        class Info extends React.Compnonent {
+            redner() {
+                <div>
+                    
                 </div>
-            );
+            }
         }
 
-        function ShowsList(props) {
-            const shows = props.shows;
-            const showsList = shows.map((show) => <ShowInfo key={show.show.id} info={show}/>);
-            return <div className="search_results">{showsList}</div>;
+        class Poster extends React.Component {
+            render() {
+                // If poster actually exists
+                const imgSRC = this.props.image.medium;
+                return (
+                    <div>
+                        <img src={imgSRC} alt=""/>
+                    </div>
+                )
+            }
         }
 
-        const results_container = document.querySelector('#search_results');
-        const root = ReactDOM.createRoot(results_container);
-        root.render(<ShowsList shows={results}/>);
+        class Result extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Poster image={this.props.img}/>
+                        <Info info={this.props}/>
+                    </div>
+                )
+            }
+        }
 
+        class SearchResults extends React.Component {
+            render() {
+                const searchResults = this.props.results.map((show) => {<Result key={show.show.id} result={show.show}/>});
+                return (
+                    <div>{searchResutls}</div>
+                )
+            }
+        }
+
+        class Search extends React.Compnonent {
+            render() {
+                return (
+                    <form>
+                        <input type="text" placeholder="Search..."/>
+                    </form>
+                )
+            }
+        }
+
+        class App extends React.Compnonent {
+            render() {
+                return (
+                    <div>
+                        <Search />
+                        <SearchResults results={this.props.data}/>
+                    </div>
+                );
+            };
+        };*/}
+
+        export default function App() {
+            return (
+                <div>Hello</div>
+            )
+        }
+
+        const container = document.querySelector("#container");
+        const root = ReactDOM.createRoot(container);
+        root.render(<App/>);
     </script>
 </body>
 </html>
