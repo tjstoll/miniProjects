@@ -148,15 +148,29 @@ function drawSkew(x, y, orientation) {
     ctx.closePath()
 }
 
+// ----------------------------------------------------------------------------
+
+function updateBlockPosition() {
+    ctx.clearRect(0,0, canvas_width, canvas_height);
+    drawL(x, y, or);
+    y += blockSize;
+    x += dx;
+}
+
+// ----------------------------------------------------------------------------
+
 function keyUpHandler(e) {
     if (e.key === 'Space' || e.key === " ") {
         if (or < 3) {
-            or++
+            or++;
+            updateBlockPosition();
         } else {
             or = 0;
+            updateBlockPosition();
         }
     } else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         dx = 0;
+        updateBlockPosition();
     }
     e.preventDefault();
 }
@@ -164,8 +178,10 @@ function keyUpHandler(e) {
 function keyDownHandler(e) {
     if (e.key === "ArrowLeft" || e.key === "Left") {
         dx = -blockSize;
+        updateBlockPosition();
     } else if (e.key === "ArrowRight" || e.key === "Right") {
         dx = blockSize;
+        updateBlockPosition();
     }
     e.preventDefault();
 }
@@ -173,11 +189,10 @@ function keyDownHandler(e) {
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener("keydown", keyDownHandler, false);
 
+// ----------------------------------------------------------------------------
+
 function gameLoop() {
-    ctx.clearRect(0,0, canvas_width, canvas_height);
-    drawL(x, y, or);
-    y += blockSize;
-    x += dx;
+    updateBlockPosition();
 }
 
 function start() {
