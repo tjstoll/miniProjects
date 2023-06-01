@@ -2,4 +2,4 @@
 
 started: 22-nov-18
 
-Make a classic web page with header, navigation, main, aside, and footer. Style as you please.
+A classic web page with header, navigation, main, aside, and footer using semantic HTML and css grid.
