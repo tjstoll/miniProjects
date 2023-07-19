@@ -1,6 +1,6 @@
 'use strict';
 
-let search_data; //= JSON.parse(data);
+let search_data; // = JSON.parse(data);
 let search_results = document.querySelector("#search_results");
 const search_input = document.querySelector('#search_input');
 const baseURL = "https://api.tvmaze.com/search/shows?q=";
@@ -37,13 +37,11 @@ async function handleSearchInput(e) {
         try {
             await getData(searchURL);
             SearchResults(search_data);
+            search_input.value = '';
         } catch(e) {
             console.log(e);
             search_results.appendChild(DisplayError());
         }
-
-        search_input.value = '';
-
     }
 }
 
@@ -53,7 +51,7 @@ function Title(data) {
     const title = document.createElement('div');
     title.classList = ['title'];
 
-    const show_title = document.createElement('h2');
+    const show_title = document.createElement('h3');
     const show_title_text = document.createTextNode(data.name);
     show_title.appendChild(show_title_text);
 
@@ -119,13 +117,27 @@ function Poster(img) {
     
     try {
         poster_img.src = img.medium;
+        poster.appendChild(poster_img);
+
     } catch(e) {
-        poster_img.src = '#';
+        poster.innerHTML = "<p>NO IMAGE<br>AVAILABLE</p>";
     }
 
-    poster.appendChild(poster_img);
 
     return poster;
+}
+
+function Message(text) {
+    const message = document.createElement('div');
+    message.classList = ['message'];
+    const msg = document.createElement('h2')
+    const message_text = document.createTextNode(`Showing reaults for: ${text}`);
+    
+    msg.appendChild(message_text);
+    message.appendChild(msg);
+
+    return message;
+
 }
 
 function Result(show) {
@@ -149,7 +161,7 @@ function NoResults() {
 
 function SearchResults(data) {
     search_results.innerHTML = "";
-    search_results
+    search_results.appendChild(Message(search_input.value));
     if (data.length > 0) {
         const results = data.map((d) => {
             return Result(d.show);
