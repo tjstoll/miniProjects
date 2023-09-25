@@ -1,8 +1,5 @@
-# Simple TODO List Using React
+# Simple TODO List Using Mongoose and Express
 
 created on: 22-Dec-05
-Stepping back into the world of React with this simple TODO list. Essentially, I want it to:
-- Take input from user
-- Update list with input
-- Mark task as completed upon request
-- Delete task upon request
+
+Originally created to explore React, but now the project has changed to explore Mongoose and Express primarily. Essentially, I want to implement a full CRUD routine to create a todo list.
