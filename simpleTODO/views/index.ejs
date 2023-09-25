@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTful ToDo</title>
+</head>
+
+<body>
+    <h1>TODO!</h1>
+    <form method="POST" action="/">
+        <input name="newItem" type="text">
+        <button>add</button>
+    </form>
+    <ul>
+        <% for (let item of todo) {%>
+            <li>
+                <form method="POST" action="/<%= item.id %>/state?_method=PATCH">
+                    <button class="stateButton <%= item.state %>">&check;</button>
+                </form>
+                <form class="updateArea" method="POST" action="/<%= item.id %>?_method=PATCH">
+                    <input class="<%= item.state %>" name="updatedItem" type="text" value="<%= item.item%>">
+                </form>
+                <form method="POST" action="/<%= item.id %>?_method=DELETE">
+                    <button class="deleteButton">x</button>
+                </form>
+            </li>
+        <%}%>
+    </ul>
+</body>
+</html>

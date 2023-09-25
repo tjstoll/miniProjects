@@ -1,0 +1,60 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+input {
+    border: 1px solid black;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 50%;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: white;
+    border: 1px solid black;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+section {
+    display: flex;
+    gap: 10px;
+}
+
+p {
+    margin: 0;
+}
+
+.updateArea input {
+    border: none;
+}
+
+.complete {
+    text-decoration: line-through;
+}
+.incomplete {
+    text-decoration: none;
+}
+
+.stateButton {
+    border-radius: 100%;
+}
+.stateButton.complete {
+    text-decoration: none;
+    background-color: rgb(196, 255, 196);
+}
+.deleteButton {
+    border: none;
+}
