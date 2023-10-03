@@ -8,23 +8,13 @@
 
 <body>
     <h1>TODO!</h1>
-    <form method="POST" action="/">
-        <input name="newItem" type="text">
+    <form method="POST" action="/new/list">
+        <input name="title" type="text">
         <button>add</button>
     </form>
     <ul>
-        <% for (let item of todo) {%>
-            <li>
-                <form method="POST" action="/<%= item.id %>/state?_method=PATCH">
-                    <button class="stateButton <%= item.state %>">&check;</button>
-                </form>
-                <form class="updateArea" method="POST" action="/<%= item.id %>?_method=PATCH">
-                    <input class="<%= item.state %>" name="updatedItem" type="text" value="<%= item.item%>">
-                </form>
-                <form method="POST" action="/<%= item.id %>?_method=DELETE">
-                    <button class="deleteButton">x</button>
-                </form>
-            </li>
+        <% for (let list of lists) {%>
+            <li><a href="/list/<%=list._id%>"><%= list.title %></a></li>
         <%}%>
     </ul>
 </body>
