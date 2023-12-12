@@ -1,98 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>My Movie App</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Vanilla Shows App</title>
+
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
-      
 </head>
 <body>
+    <header>
+        <h1>My Vanilla Shows App</h1>
+        <p>Data from <a href="https://tvmaze.com/api" target="_blank">tvmaze.com</a></p>
+    </header>
 
-    <h1>My Shows App</h1>
-    <div class="container">
-    
-    </div>
-    
-    <script src="data.js"></script>
-    <script src="fetchData.js"></script>
-    <script type="text/babel">
+    <section class="container">
+        <section id="search_area">
+            <form action="">
+                <input type="text" placeholder="Search Shows..." id="search_input">
+            </form>
+        </section>
 
-        {/*
-        class Info extends React.Compnonent {
-            redner() {
-                <div>
-                    
-                </div>
-            }
-        }
+        <section id="search_results">
+        </section>
+    </section>
 
-        class Poster extends React.Component {
-            render() {
-                // If poster actually exists
-                const imgSRC = this.props.image.medium;
-                return (
-                    <div>
-                        <img src={imgSRC} alt=""/>
-                    </div>
-                )
-            }
-        }
-
-        class Result extends React.Component {
-            render() {
-                return (
-                    <div>
-                        <Poster image={this.props.img}/>
-                        <Info info={this.props}/>
-                    </div>
-                )
-            }
-        }
-
-        class SearchResults extends React.Component {
-            render() {
-                const searchResults = this.props.results.map((show) => {<Result key={show.show.id} result={show.show}/>});
-                return (
-                    <div>{searchResutls}</div>
-                )
-            }
-        }
-
-        class Search extends React.Compnonent {
-            render() {
-                return (
-                    <form>
-                        <input type="text" placeholder="Search..."/>
-                    </form>
-                )
-            }
-        }
-
-        class App extends React.Compnonent {
-            render() {
-                return (
-                    <div>
-                        <Search />
-                        <SearchResults results={this.props.data}/>
-                    </div>
-                );
-            };
-        };*/}
-
-        export default function App() {
-            return (
-                <div>Hello</div>
-            )
-        }
-
-        const container = document.querySelector("#container");
-        const root = ReactDOM.createRoot(container);
-        root.render(<App/>);
-    </script>
+    <!-- <script src="fetchData.js"></script> -->
+    <script type="text/babel" src="app.js"></script>
 </body>
 </html>
