@@ -34,13 +34,14 @@ function SearchForm({handleKeyPress}) {
     );
 }
 
-function Title({title, rating, genreList}) {
+function Title({title, rating, premierDate, genreList}) {
     const ratings = rating ? rating : "No Rating";
+    const date = premierDate ? `Premiered: ${premierDate.slice(0,4)}` : "No Premier Date"
     const genres = genreList.length > 0 ? `Genres: ${genreList.join(', ')}` : "No genres listed";
     return (
         <div className="title">
             <h3>{title}</h3>
-            <p>{ratings}</p>
+            <p>{date} | {ratings} &#9733;</p>
             <p>{genres}</p>
         </div>
     );
@@ -62,7 +63,7 @@ function Poster({imgSrc, altText}) {
     try {
         return (
             <div className="poster">
-                <img src={imgSrc.medium} alt={altText}/>;
+                <img src={imgSrc.medium} alt={altText}/>
             </div>
         )
     } catch (e) {
@@ -79,7 +80,11 @@ function Result({showData}) {
         <section className="result">
             <Poster imgSrc={showData.image} altText={showData.name}/>
             <div className="info">
-                <Title title={showData.name} rating={showData.rating.average} genreList={showData.genres}/>
+                <Title title={
+                    showData.name}
+                    rating={showData.rating.average}
+                    premierDate={showData.premiered}
+                    genreList={showData.genres}/>
                 <Description summary={showData.summary}/>
             </div>
         </section>
@@ -93,8 +98,8 @@ function SearchResults({data}) {
         return <section id="search_results">{results}</section>;
     } else {
         return (
-        <section>
-            <h1>Search your favourite shows!</h1>
+        <section id="initial_screen">
+            <p>Search your favourite shows!</p>
         </section>
         );
     }
