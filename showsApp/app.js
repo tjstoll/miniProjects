@@ -1,12 +1,11 @@
 'use strict';
 
-let search_data = JSON.parse(data);
-let search_results = document.querySelector("#search_results");
-const search_input = document.querySelector('#search_input');
+let search_data = []; //JSON.parse(data);
+let container = document.querySelector(".container");
+const root = ReactDOM.createRoot(container);
 const baseURL = "https://api.tvmaze.com/search/shows?q=";
 
-
-// Handle Input ---------------------------------------------------------------
+// Data ---------------------------------------------------------------
 async function getData(url) {
     await fetch(url)
     .then(response => response.json())
@@ -19,25 +18,22 @@ async function getData(url) {
     });
 }
 
-async function handleSearchInput(e) {
-    if (e.key == "Enter") {
-        e.preventDefault();
-        let search_value = search_input.value.replaceAll(' ', '+');
-        let searchURL = baseURL + search_value;
-        
-        try {
-            await getData(searchURL);
-            SearchResults(search_data);
-            search_input.value = '';
-        } catch(e) {
-            console.log(e);
-        }
-    }
+// React ----------------------------------------------------------------------
+function SearchForm({handleKeyPress}) {
+    return (
+        <section id="search_area">
+            <form action="">
+                <input
+                type="text"
+                placeholder="Search Shows..."
+                id="search_input"
+                onKeyPress = {handleKeyPress}
+                />
+            </form>
+        </section>
+    );
 }
 
-// search_input.addEventListener('keypress', handleSearchInput);
-
-// React ----------------------------------------------------------------------
 function Title({title, rating, genreList}) {
     const ratings = rating ? rating : "No Rating";
     const genres = genreList.length > 0 ? `Genres: ${genreList.join(', ')}` : "No genres listed";
@@ -62,16 +58,16 @@ function Description({summary}) {
     );
 }
 
-function Poster({imgSrc}) {
+function Poster({imgSrc, altText}) {
     try {
         return (
             <div className="poster">
-                <img src={imgSrc.medium} />;
+                <img src={imgSrc.medium} alt={altText}/>;
             </div>
         )
     } catch (e) {
         return (
-            <div className="Poster">
+            <div className="poster">
                 <p>NO IMAGE<br/>AVAILABLE</p>
             </div>
             )
@@ -81,7 +77,7 @@ function Poster({imgSrc}) {
 function Result({showData}) {
     return (
         <section className="result">
-            <Poster imgSrc={showData.image} />
+            <Poster imgSrc={showData.image} altText={showData.name}/>
             <div className="info">
                 <Title title={showData.name} rating={showData.rating.average} genreList={showData.genres}/>
                 <Description summary={showData.summary}/>
@@ -91,11 +87,46 @@ function Result({showData}) {
 }
 
 
-// Build ----------------------------------------------------------------------
 function SearchResults({data}) {
-    const results = data.map((d) => <Result key={d.show.id} showData={d.show} />);
-    return <>{results}</>;
+    if (data.length > 0) {
+        const results = data.map((d) => <Result key={d.show.id} showData={d.show} />);
+        return <section id="search_results">{results}</section>;
+    } else {
+        return (
+        <section>
+            <h1>Search your favourite shows!</h1>
+        </section>
+        );
+    }
 }
 
-const root = ReactDOM.createRoot(search_results);
-root.render(<SearchResults data={search_data} />);
+// Build ----------------------------------------------------------------------
+function App() {
+    const [data, setData] = React.useState([]);
+
+    async function handleKeyPress(e) {
+        if (e.key == "Enter") {
+            e.preventDefault();
+            const search_input = document.querySelector('#search_input');
+            let search_value = search_input.value.replaceAll(' ', '+');
+            let searchURL = baseURL + search_value;
+
+            try {
+                await getData(searchURL);
+                search_input.value = '';
+                setData(search_data);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
+
+    return (
+        <>
+            <SearchForm handleKeyPress={handleKeyPress}/>
+            <SearchResults data={search_data} />
+        </>
+    )
+}
+
+root.render(<App />);
